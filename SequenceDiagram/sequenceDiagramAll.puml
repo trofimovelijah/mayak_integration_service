@@ -1,0 +1,26 @@
+@startuml Authentication
+
+' Определение участников диаграммы
+actor "Пользователь" as User
+actor "Благотворитель" as Donor 
+actor "Администратор" as Admin 
+participant "Платформа" as Platform 
+participant "Сервис рассылки\n UnisenderGo" as UnisenderGo
+participant "Сервис рассылки\n Unisender" as Unisender
+participant "Платёжный сервис\n CloudPayments" as CloudPayments
+participant "Платёжный сервис\n MixPlat" as MixPlat
+participant "Сервис\n интеграции" as IntegrationService
+
+' Описание последовательности сообщений
+User -> Platform: Открывает экран входа
+User -> Platform: Вводит логин и пароль, нажимает "Войти"
+Platform -> UnisenderGo: Запрос на аутентификацию
+
+alt Аутентификация успешна
+    User --> UnisenderGo: Успешный ответ
+else Аутентификация не удалась
+    User --> UnisenderGo: Ответ с ошибкой
+    Unisender -> Unisender: Показывает уведомление об ошибке
+end
+
+@enduml
