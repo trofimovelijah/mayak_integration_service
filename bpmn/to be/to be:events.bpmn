@@ -35,6 +35,7 @@
     </bpmn:textAnnotation>
     <bpmn:association id="Association_1rlcr24" associationDirection="None" sourceRef="Activity_1lytonq" targetRef="TextAnnotation_1sw5r5g" />
     <bpmn:association id="Association_0ksbcpr" associationDirection="None" sourceRef="Activity_16rfrpj" targetRef="TextAnnotation_01fxj94" />
+    <bpmn:association id="Association_0bds0pp" associationDirection="None" sourceRef="Activity_13qatgr" targetRef="TextAnnotation_0r7rvvq" />
   </bpmn:collaboration>
   <bpmn:process id="Process_0x6ker9" isExecutable="true">
     <bpmn:laneSet id="LaneSet_0hfkybe">
@@ -336,7 +337,7 @@
       <bpmn:sequenceFlow id="Flow_1kb52sa" sourceRef="Gateway_0dpsrnx" targetRef="Event_16djl6d" />
       <bpmn:sequenceFlow id="Flow_0e3ac6s" sourceRef="Activity_0r3qctk" targetRef="Gateway_0dpsrnx" />
     </bpmn:subProcess>
-    <bpmn:subProcess id="Activity_0kpwa6m" name="Отправка письма через UnisenderGo">
+    <bpmn:subProcess id="Activity_0kpwa6m" name="Отправка письма о Событии через UnisenderGo">
       <bpmn:incoming>Flow_1xelf5u</bpmn:incoming>
       <bpmn:outgoing>Flow_0ym4dsv</bpmn:outgoing>
       <bpmn:serviceTask id="Activity_1rneyaf" name="Отправить email через UnisenderGo">
@@ -508,7 +509,6 @@
     <bpmn:sequenceFlow id="Flow_0gtdhkv" sourceRef="Gateway_0o6fvez" targetRef="Activity_0ahega2" />
     <bpmn:sequenceFlow id="Flow_1oke6ja" sourceRef="Activity_08ut5vf" targetRef="Gateway_0o6fvez" />
     <bpmn:sequenceFlow id="Flow_1ogrlzk" sourceRef="Activity_084cy2g" targetRef="Gateway_0o6fvez" />
-    <bpmn:association id="Association_0bds0pp" associationDirection="None" sourceRef="Activity_13qatgr" targetRef="TextAnnotation_0r7rvvq" />
     <bpmn:association id="Association_1pu6w16" associationDirection="None" sourceRef="Activity_0ahega2" targetRef="TextAnnotation_0sr2ujj" />
   </bpmn:process>
   <bpmn:process id="Process_1g0sg13" isExecutable="false">
@@ -1119,10 +1119,6 @@
       <bpmndi:BPMNShape id="Activity_0ct4fbm_di" bpmnElement="Activity_084cy2g">
         <dc:Bounds x="5370" y="1930" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_0bds0pp_di" bpmnElement="Association_0bds0pp">
-        <di:waypoint x="3900" y="1406" />
-        <di:waypoint x="3900" y="1406" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_1pu6w16_di" bpmnElement="Association_1pu6w16">
         <di:waypoint x="5700" y="2224" />
         <di:waypoint x="5865" y="2239" />
@@ -1316,6 +1312,10 @@
         <di:waypoint x="451" y="780" />
         <di:waypoint x="383" y="688" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0bds0pp_di" bpmnElement="Association_0bds0pp">
+        <di:waypoint x="3838" y="1380" />
+        <di:waypoint x="3809" y="1280" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1nxf40d_di" bpmnElement="Flow_1nxf40d">
         <di:waypoint x="811" y="670" />
         <di:waypoint x="811" y="1402" />
@@ -1383,12 +1383,12 @@
           <dc:Bounds x="4234" y="87" width="59" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0r7rvvq_di" bpmnElement="TextAnnotation_0r7rvvq">
-        <dc:Bounds x="3900" y="1360" width="220" height="70" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_0sr2ujj_di" bpmnElement="TextAnnotation_0sr2ujj">
         <dc:Bounds x="5780" y="2256" width="170" height="27" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0r7rvvq_di" bpmnElement="TextAnnotation_0r7rvvq">
+        <dc:Bounds x="3760" y="1210" width="220" height="70" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>

@@ -125,47 +125,47 @@
       <bpmn:outgoing>Flow_1q14rji</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_050ju5m" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:serviceTask id="Activity_1vaujot" name="ST_RC_120&#10;Получить триггер">
+    <bpmn:serviceTask id="Activity_1vaujot" name="Получить триггер">
       <bpmn:incoming>Flow_1q14rji</bpmn:incoming>
       <bpmn:outgoing>Flow_0qnijr5</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0493wuo" name="ST_RC_123&#10;Добавить email в список рассылки">
+    <bpmn:serviceTask id="Activity_0493wuo" name="Добавить email в список рассылки">
       <bpmn:incoming>Flow_0imfgga</bpmn:incoming>
       <bpmn:outgoing>Flow_0fzgpl5</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:exclusiveGateway id="Gateway_0wpw5j6" name="GW_RC_101&#10;Добавлено в рассылку?">
+    <bpmn:exclusiveGateway id="Gateway_0wpw5j6" name="Добавлено в рассылку?">
       <bpmn:incoming>Flow_0fzgpl5</bpmn:incoming>
       <bpmn:outgoing>Flow_1vz0y3o</bpmn:outgoing>
       <bpmn:outgoing>Flow_0x4xokw</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_0zbreeg" name="ST_RC_126&#10;Отправить письмо через UnisenderGo">
+    <bpmn:serviceTask id="Activity_0zbreeg" name="Отправить письмо через UnisenderGo">
       <bpmn:incoming>Flow_0saff31</bpmn:incoming>
       <bpmn:outgoing>Flow_04g5h4w</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:exclusiveGateway id="Gateway_0mr2lni" name="GW_RC_102&#10;Email отправлен?">
+    <bpmn:exclusiveGateway id="Gateway_0mr2lni" name="Email отправлен?">
       <bpmn:incoming>Flow_04g5h4w</bpmn:incoming>
       <bpmn:outgoing>Flow_023noyz</bpmn:outgoing>
       <bpmn:outgoing>Flow_0tde5e3</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_0553l6a" name="ST_RC_127&#10;Записать лог успешной отправки">
+    <bpmn:serviceTask id="Activity_0553l6a" name="Записать лог успешной отправки">
       <bpmn:incoming>Flow_023noyz</bpmn:incoming>
       <bpmn:outgoing>Flow_1nihsmy</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1xtr3t5" name="ST_RC_128&#10;Записать лог ошибки">
+    <bpmn:serviceTask id="Activity_1xtr3t5" name="Записать лог ошибки">
       <bpmn:incoming>Flow_0tde5e3</bpmn:incoming>
       <bpmn:outgoing>Flow_1jdt8ro</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:endEvent id="Event_14q7m16" name="EE_RC_101">
+    <bpmn:endEvent id="Event_14q7m16" name="Финиш">
       <bpmn:incoming>Flow_1jdt8ro</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:endEvent id="Event_147kla1" name="EE_RC_100">
+    <bpmn:endEvent id="Event_147kla1" name="Конец">
       <bpmn:incoming>Flow_1nihsmy</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_08n6f0l" name="ST_RC_240&#10;Получить триггер">
+    <bpmn:serviceTask id="Activity_08n6f0l" name="Получить триггер">
       <bpmn:incoming>Flow_067qv4k</bpmn:incoming>
       <bpmn:outgoing>Flow_05dibwm</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0h8z16z" name="ST_RC_250&#10;Получить триггер">
+    <bpmn:serviceTask id="Activity_0h8z16z" name="Получить триггер">
       <bpmn:incoming>Flow_10ktydx</bpmn:incoming>
       <bpmn:outgoing>Flow_1hiu5ae</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -175,19 +175,19 @@
       <bpmn:outgoing>Flow_0ilx8xm</bpmn:outgoing>
       <bpmn:outgoing>Flow_0ieqsg4</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_1s0s8oa" name="ST_RC_260&#10;Подготовить письмо об ошибке">
+    <bpmn:serviceTask id="Activity_1s0s8oa" name="Подготовить письмо об ошибке">
       <bpmn:incoming>Flow_1bf55ff</bpmn:incoming>
       <bpmn:outgoing>Flow_11j5ums</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0jivcy3" name="ST_RC_270&#10;Подготовить письмо предупреждения">
+    <bpmn:serviceTask id="Activity_0jivcy3" name="Подготовить письмо предупреждения">
       <bpmn:incoming>Flow_0ilx8xm</bpmn:incoming>
       <bpmn:outgoing>Flow_0f421bq</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1deyupq" name="ST_RC_280&#10;Подготовить письмо отмены подписки">
+    <bpmn:serviceTask id="Activity_1deyupq" name="Подготовить письмо отмены подписки">
       <bpmn:incoming>Flow_0ieqsg4</bpmn:incoming>
       <bpmn:outgoing>Flow_02ugm85</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1imw9dv" name="ST_RC_124&#10;Подготовить email">
+    <bpmn:serviceTask id="Activity_1imw9dv" name="Подготовить email">
       <bpmn:incoming>Flow_1vz0y3o</bpmn:incoming>
       <bpmn:outgoing>Flow_0s2wf65</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -196,11 +196,11 @@
       <bpmn:incoming>Flow_06sk9g0</bpmn:incoming>
       <bpmn:outgoing>Flow_0saff31</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_1t2v2ml" name="ST_RC_121&#10;Выполнить валидацию email и суммы">
+    <bpmn:serviceTask id="Activity_1t2v2ml" name="Выполнить валидацию email и суммы">
       <bpmn:incoming>Flow_0qnijr5</bpmn:incoming>
       <bpmn:outgoing>Flow_01u7nyp</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:exclusiveGateway id="Gateway_0d84puk" name="GW_RC_100&#10;Данные валидны?">
+    <bpmn:exclusiveGateway id="Gateway_0d84puk" name="Данные валидны?">
       <bpmn:incoming>Flow_01u7nyp</bpmn:incoming>
       <bpmn:outgoing>Flow_05h0mrq</bpmn:outgoing>
       <bpmn:outgoing>Flow_1gkce9f</bpmn:outgoing>
@@ -210,15 +210,15 @@
       <bpmn:incoming>Flow_143vh30</bpmn:incoming>
       <bpmn:outgoing>Flow_0imfgga</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_0lmdcyi" name="ST_RC_130&#10;Записать лог ошибки">
+    <bpmn:serviceTask id="Activity_0lmdcyi" name="Записать лог ошибки">
       <bpmn:incoming>Flow_1gkce9f</bpmn:incoming>
       <bpmn:outgoing>Flow_143vh30</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_11rku46" name="ST_RC_122&#10;Сохранить подписку в БД">
+    <bpmn:serviceTask id="Activity_11rku46" name="Сохранить подписку в БД">
       <bpmn:incoming>Flow_05h0mrq</bpmn:incoming>
       <bpmn:outgoing>Flow_12j2ysr</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0g90xbr" name="ST_RC_125&#10;Зафиксировать признак отсутствия рассылки в БД">
+    <bpmn:serviceTask id="Activity_0g90xbr" name="Зафиксировать признак отсутствия рассылки в БД">
       <bpmn:incoming>Flow_0x4xokw</bpmn:incoming>
       <bpmn:outgoing>Flow_06sk9g0</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -253,19 +253,19 @@
     <bpmn:sequenceFlow id="Flow_1gkce9f" name="Нет" sourceRef="Gateway_0d84puk" targetRef="Activity_0lmdcyi" />
     <bpmn:sequenceFlow id="Flow_12j2ysr" sourceRef="Activity_11rku46" targetRef="Gateway_1fdx01v" />
     <bpmn:sequenceFlow id="Flow_143vh30" sourceRef="Activity_0lmdcyi" targetRef="Gateway_1fdx01v" />
-    <bpmn:intermediateCatchEvent id="Event_0ltagnp" name="MSG_RC_101&#10;Ответ о подписке">
+    <bpmn:intermediateCatchEvent id="Event_0ltagnp" name="Ответ о подписке">
       <bpmn:outgoing>Flow_0b4lzw8</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_16agyz6" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:serviceTask id="Activity_0jenftv" name="ST_RC_110&#10;Сохранить в БД">
+    <bpmn:serviceTask id="Activity_0jenftv" name="Сохранить в БД">
       <bpmn:incoming>Flow_162hprv</bpmn:incoming>
       <bpmn:outgoing>Flow_199cu4y</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:receiveTask id="Activity_0b1vkqv" name="RT_RC_100&#10;Получить данные о подписке">
+    <bpmn:receiveTask id="Activity_0b1vkqv" name="Получить данные о подписке">
       <bpmn:incoming>Flow_0b4lzw8</bpmn:incoming>
       <bpmn:outgoing>Flow_162hprv</bpmn:outgoing>
     </bpmn:receiveTask>
-    <bpmn:serviceTask id="Activity_0i30jec" name="ST_RC_111&#10;Создать триггер подписки">
+    <bpmn:serviceTask id="Activity_0i30jec" name="Создать триггер подписки">
       <bpmn:incoming>Flow_199cu4y</bpmn:incoming>
       <bpmn:outgoing>Flow_129hex3</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -273,24 +273,24 @@
       <bpmn:outgoing>Flow_0qvpa19</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_10mx30z" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:receiveTask id="Activity_0ze9yft" name="RT_RC_200&#10;Получить результат списания">
+    <bpmn:receiveTask id="Activity_0ze9yft" name="Получить результат списания">
       <bpmn:incoming>Flow_0qvpa19</bpmn:incoming>
       <bpmn:outgoing>Flow_1raq9ll</bpmn:outgoing>
     </bpmn:receiveTask>
-    <bpmn:serviceTask id="Activity_0phk2bq" name="ST_RC_210&#10;Сохранить результат транзакции в БД">
+    <bpmn:serviceTask id="Activity_0phk2bq" name="Сохранить результат транзакции в БД">
       <bpmn:incoming>Flow_1raq9ll</bpmn:incoming>
       <bpmn:outgoing>Flow_0b3d2c9</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1imh1aq" name="ST_RC_211&#10;Обновить данные подписки">
+    <bpmn:serviceTask id="Activity_1imh1aq" name="Обновить данные подписки">
       <bpmn:incoming>Flow_0b3d2c9</bpmn:incoming>
       <bpmn:outgoing>Flow_192k407</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:exclusiveGateway id="Gateway_1cwmvxw" name="GW_RC_210&#10;Платёж успешен?">
+    <bpmn:exclusiveGateway id="Gateway_1cwmvxw" name="Платёж успешен?">
       <bpmn:incoming>Flow_192k407</bpmn:incoming>
       <bpmn:outgoing>Flow_1b3ztpd</bpmn:outgoing>
       <bpmn:outgoing>Flow_1fzf5jm</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_0dkgpii" name="ST_RC_220&#10;Сгенерировать триггер успешного платежа">
+    <bpmn:serviceTask id="Activity_0dkgpii" name="Сгенерировать триггер успешного платежа">
       <bpmn:incoming>Flow_1b3ztpd</bpmn:incoming>
       <bpmn:outgoing>Flow_067qv4k</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -302,16 +302,16 @@
     <bpmn:sequenceFlow id="Flow_0b3d2c9" sourceRef="Activity_0phk2bq" targetRef="Activity_1imh1aq" />
     <bpmn:sequenceFlow id="Flow_192k407" sourceRef="Activity_1imh1aq" targetRef="Gateway_1cwmvxw" />
     <bpmn:sequenceFlow id="Flow_1b3ztpd" name="Да" sourceRef="Gateway_1cwmvxw" targetRef="Activity_0dkgpii" />
-    <bpmn:serviceTask id="Activity_0g81u3q" name="ST_RC_230&#10;Сгенерировать триггер ошибки">
+    <bpmn:serviceTask id="Activity_0g81u3q" name="Сгенерировать триггер ошибки">
       <bpmn:incoming>Flow_1fzf5jm</bpmn:incoming>
       <bpmn:outgoing>Flow_10ktydx</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_05dibwm" sourceRef="Activity_08n6f0l" targetRef="Activity_07fapak" />
     <bpmn:sequenceFlow id="Flow_1ytjlb6" sourceRef="Activity_07fapak" targetRef="Activity_1m5h9rq" />
-    <bpmn:sendTask id="Activity_1m5h9rq" name="ST_RC_245&#10;Отправить письмо">
+    <bpmn:sendTask id="Activity_1m5h9rq" name="Отправить письмо">
       <bpmn:incoming>Flow_1ytjlb6</bpmn:incoming>
     </bpmn:sendTask>
-    <bpmn:serviceTask id="Activity_04tsqep" name="ST_RC_251&#10;Проверить число неудачных попыток">
+    <bpmn:serviceTask id="Activity_04tsqep" name="Проверить число неудачных попыток">
       <bpmn:incoming>Flow_1hiu5ae</bpmn:incoming>
       <bpmn:outgoing>Flow_1no220c</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -321,16 +321,16 @@
       <bpmn:startEvent id="Event_0ap5fv6" name="Получен триггер">
         <bpmn:outgoing>Flow_06moj0k</bpmn:outgoing>
       </bpmn:startEvent>
-      <bpmn:exclusiveGateway id="Gateway_11c7j95" name="GW_RC_220&#10;12-й платёж?">
+      <bpmn:exclusiveGateway id="Gateway_11c7j95" name="12-й платёж?">
         <bpmn:incoming>Flow_15c6s70</bpmn:incoming>
         <bpmn:outgoing>Flow_03gazts</bpmn:outgoing>
         <bpmn:outgoing>Flow_1bhs4ah</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:serviceTask id="Activity_06c5q6j" name="ST_RC_242&#10;Подготовить письмо благодарности за 12 месяцев">
+      <bpmn:serviceTask id="Activity_06c5q6j" name="Подготовить письмо благодарности за 12 месяцев">
         <bpmn:incoming>Flow_1bhs4ah</bpmn:incoming>
         <bpmn:outgoing>Flow_0rlhhmd</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:serviceTask id="Activity_1gs8ogg" name="ST_RC_243&#10;Подготовить обычное письмо">
+      <bpmn:serviceTask id="Activity_1gs8ogg" name="Подготовить обычное письмо">
         <bpmn:incoming>Flow_03gazts</bpmn:incoming>
         <bpmn:outgoing>Flow_1eizbqr</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -343,7 +343,7 @@
         <bpmn:incoming>Flow_06nv26r</bpmn:incoming>
         <bpmn:outgoing>Flow_15c6s70</bpmn:outgoing>
       </bpmn:businessRuleTask>
-      <bpmn:businessRuleTask id="Activity_0se2dvd" name="ST_RC_241&#10;Проверить стоимость &#62;=50K">
+      <bpmn:businessRuleTask id="Activity_0se2dvd" name="Проверить стоимость &#62;=50K">
         <bpmn:incoming>Flow_06moj0k</bpmn:incoming>
         <bpmn:outgoing>Flow_0zb0ehf</bpmn:outgoing>
       </bpmn:businessRuleTask>
@@ -380,11 +380,11 @@
       <bpmn:group id="Group_1twthvm" categoryValueRef="CategoryValue_10xxqxx" />
       <bpmn:group id="Group_0v67a2e" categoryValueRef="CategoryValue_0xu2h5u" />
     </bpmn:subProcess>
-    <bpmn:sendTask id="Activity_03jv730" name="ST_RC_261&#10;Отправить письмо об ошибке">
+    <bpmn:sendTask id="Activity_03jv730" name="Отправить письмо об ошибке">
       <bpmn:incoming>Flow_11j5ums</bpmn:incoming>
       <bpmn:outgoing>Flow_1b3emqc</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:sendTask id="Activity_1kjlyb2" name="ST_RC_281&#10;Отправить письмо об отмене подписки">
+    <bpmn:sendTask id="Activity_1kjlyb2" name="Отправить письмо об отмене подписки">
       <bpmn:incoming>Flow_02ugm85</bpmn:incoming>
       <bpmn:outgoing>Flow_1tlj865</bpmn:outgoing>
     </bpmn:sendTask>
@@ -395,64 +395,64 @@
     <bpmn:sequenceFlow id="Flow_1b3emqc" sourceRef="Activity_03jv730" targetRef="Activity_0iwte4m" />
     <bpmn:sequenceFlow id="Flow_1tlj865" sourceRef="Activity_1kjlyb2" targetRef="Activity_0kar6k4" />
     <bpmn:sequenceFlow id="Flow_12k06l1" sourceRef="Activity_1sxvhsh" targetRef="Activity_0lvchwl" />
-    <bpmn:serviceTask id="Activity_0kar6k4" name="ST_RC_282&#10;Отменить подписку в БД">
+    <bpmn:serviceTask id="Activity_0kar6k4" name="Отменить подписку в БД">
       <bpmn:incoming>Flow_1tlj865</bpmn:incoming>
       <bpmn:outgoing>Flow_1rllrgv</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0m9uv4m" name="ST_RC_283&#10;Сформировать API запрос отмены подписки">
+    <bpmn:serviceTask id="Activity_0m9uv4m" name="Сформировать API запрос отмены подписки">
       <bpmn:incoming>Flow_1rllrgv</bpmn:incoming>
       <bpmn:outgoing>Flow_0dluzfw</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0iwte4m" name="ST_RC_262&#10;Записать лог отправки">
+    <bpmn:serviceTask id="Activity_0iwte4m" name="Записать лог отправки">
       <bpmn:incoming>Flow_1b3emqc</bpmn:incoming>
       <bpmn:outgoing>Flow_0wkjc4m</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0lvchwl" name="ST_RC_290&#10;Завершить обработку">
+    <bpmn:serviceTask id="Activity_0lvchwl" name="Завершить обработку">
       <bpmn:incoming>Flow_0wkjc4m</bpmn:incoming>
       <bpmn:incoming>Flow_0dluzfw</bpmn:incoming>
       <bpmn:incoming>Flow_12k06l1</bpmn:incoming>
       <bpmn:outgoing>Flow_1whtj2x</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:endEvent id="Event_1uf3ixr" name="EE_RC_201&#10;Ошибка">
+    <bpmn:endEvent id="Event_1uf3ixr" name="Ошибка">
       <bpmn:incoming>Flow_1whtj2x</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1rllrgv" sourceRef="Activity_0kar6k4" targetRef="Activity_0m9uv4m" />
     <bpmn:sequenceFlow id="Flow_0dluzfw" sourceRef="Activity_0m9uv4m" targetRef="Activity_0lvchwl" />
     <bpmn:sequenceFlow id="Flow_0wkjc4m" sourceRef="Activity_0iwte4m" targetRef="Activity_0lvchwl" />
     <bpmn:sequenceFlow id="Flow_1whtj2x" sourceRef="Activity_0lvchwl" targetRef="Event_1uf3ixr" />
-    <bpmn:intermediateCatchEvent id="Event_0bo7ve2" name="MSG_RC_300&#10;Отмена подписки">
+    <bpmn:intermediateCatchEvent id="Event_0bo7ve2" name="Отмена подписки">
       <bpmn:outgoing>Flow_1kxmcxy</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1wv5gpq" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:serviceTask id="Activity_0q2x9qa" name="ST_RC_310&#10;Изменить статус подписки">
+    <bpmn:serviceTask id="Activity_0q2x9qa" name="Изменить статус подписки">
       <bpmn:incoming>Flow_1kxmcxy</bpmn:incoming>
       <bpmn:outgoing>Flow_07lczzq</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1f95bjm" name="ST_RC_311&#10;Сгенерировать триггер отмены">
+    <bpmn:serviceTask id="Activity_1f95bjm" name="Сгенерировать триггер отмены">
       <bpmn:incoming>Flow_07lczzq</bpmn:incoming>
       <bpmn:outgoing>Flow_1dcjpz3</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_134boi7" name="ST_RC_320&#10;Получить триггер отмены">
+    <bpmn:serviceTask id="Activity_134boi7" name="Получить триггер отмены">
       <bpmn:incoming>Flow_1dcjpz3</bpmn:incoming>
       <bpmn:outgoing>Flow_1ykotvm</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_12533mb" name="ST_RC_321&#10;Добавить email в лист отписки">
+    <bpmn:serviceTask id="Activity_12533mb" name="Добавить email в лист отписки">
       <bpmn:incoming>Flow_1ykotvm</bpmn:incoming>
       <bpmn:outgoing>Flow_1uoliz7</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0j1iuxg" name="ST_RC_322&#10;Сформировать прощальное письмо">
+    <bpmn:serviceTask id="Activity_0j1iuxg" name="Сформировать прощальное письмо">
       <bpmn:incoming>Flow_1uoliz7</bpmn:incoming>
       <bpmn:outgoing>Flow_08q8w5i</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1u7x7dn" name="ST_RC_330&#10;Отменить подписку в платёжном сервисе">
+    <bpmn:serviceTask id="Activity_1u7x7dn" name="Отменить подписку в платёжном сервисе">
       <bpmn:incoming>Flow_1e4st8r</bpmn:incoming>
       <bpmn:outgoing>Flow_085l5gi</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_04ob022" name="ST_RC_323&#10;Записать лог отмены">
+    <bpmn:serviceTask id="Activity_04ob022" name="Записать лог отмены">
       <bpmn:incoming>Flow_08q8w5i</bpmn:incoming>
       <bpmn:outgoing>Flow_1e4st8r</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sendTask id="Activity_1go3ur1" name="ST_RC_331&#10;Отправить прощальное письмо">
+    <bpmn:sendTask id="Activity_1go3ur1" name="Отправить прощальное письмо">
       <bpmn:incoming>Flow_085l5gi</bpmn:incoming>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_1kxmcxy" sourceRef="Event_0bo7ve2" targetRef="Activity_0q2x9qa" />
@@ -466,15 +466,15 @@
     <bpmn:association id="Association_0dbk7g1" associationDirection="None" sourceRef="Activity_0dkgpii" targetRef="TextAnnotation_06dlzcg" />
   </bpmn:process>
   <bpmn:process id="Process_1g0sg13" isExecutable="false">
-    <bpmn:intermediateCatchEvent id="Event_0s59vis" name="MSG_RC_100&#10;Запрос на подписку">
+    <bpmn:intermediateCatchEvent id="Event_0s59vis" name="Запрос на подписку">
       <bpmn:outgoing>Flow_1qw0l70</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1dypv2z" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:serviceTask id="Activity_1h11sbq" name="ST_RC_101&#10;Создать рекуррентную подписку">
+    <bpmn:serviceTask id="Activity_1h11sbq" name="Создать рекуррентную подписку">
       <bpmn:incoming>Flow_1qw0l70</bpmn:incoming>
       <bpmn:outgoing>Flow_0pk5lal</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sendTask id="Activity_1x0rbll" name="ST_RC_102&#10;Отправить callback успеха">
+    <bpmn:sendTask id="Activity_1x0rbll" name="Отправить callback успеха">
       <bpmn:incoming>Flow_0pk5lal</bpmn:incoming>
     </bpmn:sendTask>
     <bpmn:sendTask id="Activity_1b6n0hn" name="Отправить сигнал в Битрикс">
@@ -495,19 +495,19 @@
       <bpmn:outgoing>Flow_1ffv62g</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_07m0thy" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:serviceTask id="Activity_10nguz4" name="ST_RC_200&#10;Запросить подписки на списание">
+    <bpmn:serviceTask id="Activity_10nguz4" name="Запросить подписки на списание">
       <bpmn:incoming>Flow_1ffv62g</bpmn:incoming>
       <bpmn:outgoing>Flow_08uv8rg</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1irhlc9" name="ST_RC_201&#10;Обработать рекуррентный платёж">
+    <bpmn:serviceTask id="Activity_1irhlc9" name="Обработать рекуррентный платёж">
       <bpmn:incoming>Flow_08uv8rg</bpmn:incoming>
       <bpmn:outgoing>Flow_08pofdr</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sendTask id="Activity_0ugjyu3" name="ST_RC_202&#10;Получить Callback: success">
+    <bpmn:sendTask id="Activity_0ugjyu3" name="Получить Callback: success">
       <bpmn:incoming>Flow_1oafuh2</bpmn:incoming>
       <bpmn:outgoing>Flow_0y0ox2c</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:sendTask id="Activity_1v4t0ak" name="ST_RC_203&#10;Получить Callback: ошибка с причиной">
+    <bpmn:sendTask id="Activity_1v4t0ak" name="Получить Callback: ошибка с причиной">
       <bpmn:incoming>Flow_11nmk5d</bpmn:incoming>
       <bpmn:outgoing>Flow_1uhouxh</bpmn:outgoing>
     </bpmn:sendTask>
@@ -551,22 +551,22 @@
     <bpmn:sequenceFlow id="Flow_06ac5ke" sourceRef="Activity_008t0ow" targetRef="Event_1ecn7zi" />
   </bpmn:process>
   <bpmn:process id="Process_0n7kj0t" isExecutable="false">
-    <bpmn:startEvent id="StartEvent_1" name="SE_RC_100&#10;Благотворитель оформляет подписку">
+    <bpmn:startEvent id="StartEvent_1" name="Благотворитель оформляет подписку">
       <bpmn:outgoing>Flow_03lgvm2</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Activity_1lytonq" name="UT_RC_100&#10;Выбрать периодичность списания платежа">
+    <bpmn:userTask id="Activity_1lytonq" name="Выбрать периодичность списания платежа">
       <bpmn:incoming>Flow_03lgvm2</bpmn:incoming>
       <bpmn:outgoing>Flow_0ants6y</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Activity_05usgtu" name="UT_RC_101&#10;Ввести данные карты и согласие">
+    <bpmn:userTask id="Activity_05usgtu" name="Ввести данные карты и согласие">
       <bpmn:incoming>Flow_0ants6y</bpmn:incoming>
       <bpmn:outgoing>Flow_05udrmi</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Activity_15i7z33" name="UT_RC_102&#10;Подписаться на рассылку">
+    <bpmn:userTask id="Activity_15i7z33" name="Подписаться на рассылку">
       <bpmn:incoming>Flow_05udrmi</bpmn:incoming>
       <bpmn:outgoing>Flow_1gf30rs</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sendTask id="Activity_1orcue8" name="ST_RC_100&#10;Отправить запрос на создание подписки">
+    <bpmn:sendTask id="Activity_1orcue8" name="Отправить запрос на создание подписки">
       <bpmn:incoming>Flow_1gf30rs</bpmn:incoming>
       <bpmn:outgoing>Flow_0ymnac2</bpmn:outgoing>
     </bpmn:sendTask>
@@ -611,23 +611,23 @@
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_0t8y53u" sourceRef="Activity_13a0hhc" targetRef="Event_1uwj88j" />
     <bpmn:sequenceFlow id="Flow_1qv709x" sourceRef="Event_02jknkh" targetRef="Activity_13a0hhc" />
-    <bpmn:startEvent id="Event_0orj28d" name="SE_RC_300&#10;Благотворитель отменяет подписку">
+    <bpmn:startEvent id="Event_0orj28d" name="Благотворитель отменяет подписку">
       <bpmn:outgoing>Flow_0rpi7a1</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Activity_1ujc2e7" name="UT_RC_300&#10;Отменить подписку">
+    <bpmn:userTask id="Activity_1ujc2e7" name="Отменить подписку">
       <bpmn:incoming>Flow_0rpi7a1</bpmn:incoming>
       <bpmn:outgoing>Flow_0yr0ut7</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sendTask id="Activity_0hqgqhu" name="ST_RC_300&#10;Отправить запрос на отмену подписки">
+    <bpmn:sendTask id="Activity_0hqgqhu" name="Отправить запрос на отмену подписки">
       <bpmn:incoming>Flow_0yr0ut7</bpmn:incoming>
       <bpmn:outgoing>Flow_0ux4s12</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:intermediateCatchEvent id="Event_03rwh51" name="MSG_RC_301&#10;Прощально письмо">
+    <bpmn:intermediateCatchEvent id="Event_03rwh51" name="Прощальное письмо">
       <bpmn:incoming>Flow_0ux4s12</bpmn:incoming>
       <bpmn:outgoing>Flow_01o3bi3</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0bncwo1" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:receiveTask id="Activity_016btg0" name="RT_RC_300&#10;Получить подтверждение отмены подписки">
+    <bpmn:receiveTask id="Activity_016btg0" name="Получить подтверждение отмены подписки">
       <bpmn:incoming>Flow_01o3bi3</bpmn:incoming>
       <bpmn:outgoing>Flow_1t7s11d</bpmn:outgoing>
     </bpmn:receiveTask>
@@ -692,6 +692,7 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ggd5jg_di" bpmnElement="Activity_1vaujot">
         <dc:Bounds x="2017" y="370" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1vbv5bb_di" bpmnElement="Activity_0493wuo">
         <dc:Bounds x="2750" y="370" width="100" height="80" />
@@ -700,7 +701,7 @@
       <bpmndi:BPMNShape id="Gateway_0wpw5j6_di" bpmnElement="Gateway_0wpw5j6" isMarkerVisible="true">
         <dc:Bounds x="2955" y="385" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2947" y="445" width="66" height="40" />
+          <dc:Bounds x="2947" y="445" width="66" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ojo7lh_di" bpmnElement="Activity_0zbreeg">
@@ -710,32 +711,36 @@
       <bpmndi:BPMNShape id="Gateway_0mr2lni_di" bpmnElement="Gateway_0mr2lni" isMarkerVisible="true">
         <dc:Bounds x="3535" y="385" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3527" y="335" width="66" height="40" />
+          <dc:Bounds x="3530" y="335" width="60" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0s1vgix_di" bpmnElement="Activity_0553l6a">
         <dc:Bounds x="3700" y="370" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_047lwah_di" bpmnElement="Activity_1xtr3t5">
         <dc:Bounds x="3700" y="480" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_14q7m16_di" bpmnElement="Event_14q7m16">
         <dc:Bounds x="3922" y="502" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3909" y="545" width="62" height="14" />
+          <dc:Bounds x="3922" y="545" width="36" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_147kla1_di" bpmnElement="Event_147kla1">
         <dc:Bounds x="3922" y="392" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3909" y="435" width="62" height="14" />
+          <dc:Bounds x="3924" y="435" width="32" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_106iair_di" bpmnElement="Activity_08n6f0l">
         <dc:Bounds x="5930" y="700" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1sk05zz_di" bpmnElement="Activity_0h8z16z">
         <dc:Bounds x="5930" y="340" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0vsscyf_di" bpmnElement="Gateway_0vsscyf" isMarkerVisible="true">
         <dc:Bounds x="6365" y="355" width="50" height="50" />
@@ -753,6 +758,7 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0e7ol55_di" bpmnElement="Activity_1deyupq">
         <dc:Bounds x="6510" y="230" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_06hwm7d_di" bpmnElement="Activity_1imw9dv">
         <dc:Bounds x="3060" y="370" width="100" height="80" />
@@ -763,11 +769,12 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_03pvfjq_di" bpmnElement="Activity_1t2v2ml">
         <dc:Bounds x="2170" y="370" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0d84puk_di" bpmnElement="Gateway_0d84puk" isMarkerVisible="true">
         <dc:Bounds x="2322" y="385" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2314" y="445" width="66" height="40" />
+          <dc:Bounds x="2322" y="445" width="51" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1fdx01v_di" bpmnElement="Gateway_1fdx01v" isMarkerVisible="true">
@@ -775,9 +782,11 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1potopa_di" bpmnElement="Activity_0lmdcyi">
         <dc:Bounds x="2450" y="250" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_06gsnte_di" bpmnElement="Activity_11rku46">
         <dc:Bounds x="2450" y="370" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0695jyv_di" bpmnElement="Activity_0g90xbr">
         <dc:Bounds x="3060" y="250" width="100" height="80" />
@@ -786,17 +795,20 @@
       <bpmndi:BPMNShape id="Event_04njufn_di" bpmnElement="Event_0ltagnp">
         <dc:Bounds x="1379" y="1042" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1352" y="1018" width="90" height="27" />
+          <dc:Bounds x="1352" y="1018" width="90" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_18lq29j_di" bpmnElement="Activity_0jenftv">
         <dc:Bounds x="1667" y="1020" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_05fmp6n_di" bpmnElement="Activity_0b1vkqv">
         <dc:Bounds x="1467" y="1020" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1077d92_di" bpmnElement="Activity_0i30jec">
         <dc:Bounds x="1867" y="1020" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_196djyd_di" bpmnElement="Event_1vhlt7a">
         <dc:Bounds x="5092" y="1032" width="36" height="36" />
@@ -814,11 +826,12 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_041hesi_di" bpmnElement="Activity_1imh1aq">
         <dc:Bounds x="5560" y="1010" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1cwmvxw_di" bpmnElement="Gateway_1cwmvxw" isMarkerVisible="true">
         <dc:Bounds x="5745" y="1025" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="5737" y="1085" width="66" height="40" />
+          <dc:Bounds x="5745" y="1085" width="51" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ymnz3b_di" bpmnElement="Activity_0dkgpii">
@@ -831,12 +844,15 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0xexccv_di" bpmnElement="Activity_1m5h9rq">
         <dc:Bounds x="6340" y="700" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0gjyktd_di" bpmnElement="Activity_04tsqep">
         <dc:Bounds x="6130" y="340" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_14kprj8_di" bpmnElement="Activity_03jv730">
         <dc:Bounds x="6950" y="340" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ewlpr8_di" bpmnElement="Activity_1kjlyb2">
         <dc:Bounds x="7200" y="230" width="100" height="80" />
@@ -856,39 +872,47 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ey66zq_di" bpmnElement="Activity_0iwte4m">
         <dc:Bounds x="7440" y="340" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1fdulhy_di" bpmnElement="Activity_0lvchwl">
         <dc:Bounds x="7870" y="340" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1uf3ixr_di" bpmnElement="Event_1uf3ixr">
         <dc:Bounds x="8092" y="362" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="8079" y="405" width="62" height="27" />
+          <dc:Bounds x="8089" y="405" width="42" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_13tub9n_di" bpmnElement="Event_0bo7ve2">
         <dc:Bounds x="8682" y="1032" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="8655" y="1008" width="90" height="27" />
+          <dc:Bounds x="8655" y="1008" width="90" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0x7jpaw_di" bpmnElement="Activity_0q2x9qa">
         <dc:Bounds x="8770" y="1010" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_02nkbmh_di" bpmnElement="Activity_1f95bjm">
         <dc:Bounds x="8930" y="1010" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0v922gj_di" bpmnElement="Activity_134boi7">
         <dc:Bounds x="8930" y="500" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1gwqjp5_di" bpmnElement="Activity_12533mb">
         <dc:Bounds x="9080" y="500" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0qyijuu_di" bpmnElement="Activity_0j1iuxg">
         <dc:Bounds x="9230" y="500" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_025j3k1_di" bpmnElement="Activity_1u7x7dn">
         <dc:Bounds x="9530" y="500" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1xajdqj_di" bpmnElement="Activity_04ob022">
         <dc:Bounds x="9380" y="500" width="100" height="80" />
@@ -896,6 +920,7 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0wxyg9o_di" bpmnElement="Activity_1go3ur1">
         <dc:Bounds x="9680" y="500" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_0dbk7g1_di" bpmnElement="Association_0dbk7g1">
         <di:waypoint x="6013" y="1010" />
@@ -1179,14 +1204,16 @@
       <bpmndi:BPMNShape id="Event_0k0zb7m_di" bpmnElement="Event_0s59vis">
         <dc:Bounds x="979" y="1887" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="961" y="1930" width="72" height="40" />
+          <dc:Bounds x="971" y="1930" width="53" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0u05r0p_di" bpmnElement="Activity_1h11sbq">
         <dc:Bounds x="1157" y="1865" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0xtn13b_di" bpmnElement="Activity_1x0rbll">
         <dc:Bounds x="1347" y="1865" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1jmvpkm_di" bpmnElement="Activity_1b6n0hn">
         <dc:Bounds x="5051" y="1865" width="100" height="80" />
@@ -1213,12 +1240,15 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0oakyik_di" bpmnElement="Activity_1irhlc9">
         <dc:Bounds x="4470" y="1865" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ezb777_di" bpmnElement="Activity_0ugjyu3">
         <dc:Bounds x="4700" y="1765" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_06vk0qp_di" bpmnElement="Activity_1v4t0ak">
         <dc:Bounds x="4700" y="1975" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0hwqza9_di" bpmnElement="Activity_01gkw37">
         <dc:Bounds x="7770" y="1865" width="100" height="80" />
@@ -1329,7 +1359,7 @@
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="339" y="1422" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="317" y="1465" width="82" height="53" />
+          <dc:Bounds x="317" y="1465" width="82" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0vqcq6z_di" bpmnElement="Activity_1lytonq">
@@ -1342,9 +1372,11 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_00feepu_di" bpmnElement="Activity_15i7z33">
         <dc:Bounds x="777" y="1400" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0pd2aef_di" bpmnElement="Activity_1orcue8">
         <dc:Bounds x="947" y="1400" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_02sscb5_di" bpmnElement="Event_0iwzybq">
         <dc:Bounds x="3352" y="1422" width="36" height="36" />
@@ -1398,23 +1430,26 @@
       <bpmndi:BPMNShape id="Event_0orj28d_di" bpmnElement="Event_0orj28d">
         <dc:Bounds x="8372" y="1442" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="8349" y="1485" width="82" height="53" />
+          <dc:Bounds x="8349" y="1485" width="82" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0qejqu0_di" bpmnElement="Activity_1ujc2e7">
         <dc:Bounds x="8490" y="1420" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0xv29i2_di" bpmnElement="Activity_0hqgqhu">
         <dc:Bounds x="8650" y="1420" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_14aaat7_di" bpmnElement="Event_03rwh51">
         <dc:Bounds x="9712" y="1442" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="9694" y="1485" width="72" height="40" />
+          <dc:Bounds x="9697" y="1485" width="66" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0jud6x6_di" bpmnElement="Activity_016btg0">
         <dc:Bounds x="9800" y="1420" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0gjw4e3_di" bpmnElement="Event_0gjw4e3">
         <dc:Bounds x="9952" y="1442" width="36" height="36" />
@@ -1486,10 +1521,6 @@
         <di:waypoint x="529" y="1400" />
         <di:waypoint x="560" y="1371" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_1vfneek_di" bpmnElement="Association_1vfneek">
-        <di:waypoint x="1967" y="1083" />
-        <di:waypoint x="1984" y="1090" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_0oamqsq_di" bpmnElement="Association_0oamqsq">
         <di:waypoint x="5818" y="874" />
         <di:waypoint x="5829" y="866" />
@@ -1505,6 +1536,10 @@
       <bpmndi:BPMNEdge id="Association_0naah6n_di" bpmnElement="Association_0naah6n">
         <di:waypoint x="9177" y="503" />
         <di:waypoint x="9233" y="443" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1vfneek_di" bpmnElement="Association_1vfneek">
+        <di:waypoint x="1967" y="1032" />
+        <di:waypoint x="2122" y="940" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="TextAnnotation_1hz0cwk_di" bpmnElement="TextAnnotation_1hz0cwk">
         <dc:Bounds x="537" y="1330" width="100" height="41" />
@@ -1602,10 +1637,6 @@
         <dc:Bounds x="4230" y="1765" width="100" height="30" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0b65mme_di" bpmnElement="TextAnnotation_0b65mme">
-        <dc:Bounds x="1967" y="1090" width="170" height="30" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_13344oy_di" bpmnElement="TextAnnotation_13344oy">
         <dc:Bounds x="5800" y="840" width="168" height="26" />
         <bpmndi:BPMNLabel />
@@ -1634,6 +1665,10 @@
           <dc:Bounds x="9142" y="87" width="78" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0b65mme_di" bpmnElement="TextAnnotation_0b65mme">
+        <dc:Bounds x="2040" y="910" width="170" height="30" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
   <bpmndi:BPMNDiagram id="BPMNDiagram_0aegh0n">
@@ -1650,6 +1685,7 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_03vek75" bpmnElement="Activity_0se2dvd">
         <dc:Bounds x="250" y="240" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0fkcgsy_di" bpmnElement="Gateway_0fkcgsy" isMarkerVisible="true">
         <dc:Bounds x="415" y="255" width="50" height="50" />
@@ -1666,7 +1702,7 @@
       <bpmndi:BPMNShape id="BPMNShape_1b5lgue" bpmnElement="Gateway_11c7j95" isMarkerVisible="true">
         <dc:Bounds x="905" y="255" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="896" y="315" width="68" height="27" />
+          <dc:Bounds x="896" y="315" width="68" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_00oyhgv" bpmnElement="Activity_06c5q6j">
@@ -1675,6 +1711,7 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0vgagfo" bpmnElement="Activity_1gs8ogg">
         <dc:Bounds x="1050" y="240" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1gtjycc" bpmnElement="Gateway_0q59a18" isMarkerVisible="true">
         <dc:Bounds x="1245" y="255" width="50" height="50" />
