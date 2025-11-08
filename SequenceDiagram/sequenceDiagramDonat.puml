@@ -1,0 +1,38 @@
+@startuml Donation
+
+' Определение участников диаграммы
+actor "Благотворитель" as Donor #Green
+participant "Битрикс" as Bitrix #SkyBlue
+participant "Сервис\n интеграции" as IntService #GreenYellow
+participant "Сервис рассылки\n UnisenderGo" as UnisenderGo #GreenYellow
+participant "Сервис рассылки\n Unisender" as Unisender #GreenYellow
+participant "Платёжный сервис\n CloudPayments" as CloudPayments #GreenYellow
+
+' Описание последовательности сообщений
+Donor -> Bitrix: Открыть форму оплаты пожертвований
+
+    alt Оплата с согласием на рассылку
+        par 
+            IntService -> IntService: Добавление с список рассылки\n POST /email/subscribe
+            IntService -> Unisender: POST https://www.unisender.com/ru/support/api/messages/createemailmessage/
+            Unisender --> IntService: Webhook
+            Bitrix -> IntService: Запустить триггер оплаты
+            IntService -> CloudPayments: Платёж
+        end
+    else Оплата без согласия на рассылку
+        Bitrix -> IntService: Запустить триггер оплаты
+        IntService -> CloudPayments: Платёж
+    end
+
+alt Платёж прошёл успешно
+    CloudPayments -> IntService: callback со статусом success
+    IntService -> IntService: Валидация по RFC 5322
+else Платёж не прошёл
+    CloudPayments -> IntService: callback со статусом fail
+end
+
+IntService -> IntService: Выбор шаблона письма
+IntService -> UnisenderGo: Отправка письма
+UnisenderGo --> Donor: Письма с благодарностью
+
+@enduml
