@@ -1,4 +1,4 @@
-@startuml Mayak
+@startuml Events
 
 ' Определение участников диаграммы
 actor "Пользователь" as User #Red
@@ -8,8 +8,6 @@ participant "Битрикс" as Bitrix #SkyBlue
 participant "Сервис\n интеграции" as IntService #GreenYellow
 participant "Сервис рассылки\n UnisenderGo" as UnisenderGo #GreenYellow
 participant "Сервис рассылки\n Unisender" as Unisender #GreenYellow
-participant "Платёжный сервис\n CloudPayments" as CloudPayments #GreenYellow
-participant "Платёжный сервис\n MixPlat" as MixPlat #GreenYellow
 
 ' Описание последовательности сообщений
 == Регистрация на Платформе ==
