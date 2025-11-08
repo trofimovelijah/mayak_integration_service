@@ -3,7 +3,6 @@
 ' Определение участников диаграммы
 actor "Пользователь" as User #Red
 actor "Администратор" as Admin #Gray 
-actor "Благотворитель" as Donor #Green
 participant "Битрикс" as Bitrix #SkyBlue
 participant "Сервис\n интеграции" as IntService #GreenYellow
 participant "Сервис рассылки\n UnisenderGo" as UnisenderGo #GreenYellow
@@ -44,6 +43,18 @@ alt Отправка письма
 else Событие ранее создано
     IntService --> Bitrix: Событие создано\n GET /event/{event_id}
 end
+
+@enduml
+
+@startuml Events2
+
+' Определение участников диаграммы
+actor "Пользователь" as User #Red
+actor "Администратор" as Admin #Gray 
+actor "Благотворитель" as Donor #Green
+participant "Битрикс" as Bitrix #SkyBlue
+participant "Сервис\n интеграции" as IntService #GreenYellow
+participant "Сервис рассылки\n UnisenderGo" as UnisenderGo #GreenYellow
 
 == Создание События ==
 User -> Bitrix: Выполнен вход на Платформе
