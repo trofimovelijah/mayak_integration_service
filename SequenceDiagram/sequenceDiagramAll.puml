@@ -44,9 +44,7 @@ else Событие ранее создано
     IntService --> Bitrix: Событие создано\n GET /event/{event_id}
 end
 
-@enduml
-
-@startuml Events2
+newpage
 
 ' Определение участников диаграммы
 actor "Пользователь" as User #Red
