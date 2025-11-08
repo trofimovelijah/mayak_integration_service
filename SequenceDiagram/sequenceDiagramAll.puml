@@ -1,37 +1,93 @@
 @startuml Mayak
 
 ' Определение участников диаграммы
-actor "Администратор" as Admin #Gray 
 actor "Пользователь" as User #Red
+actor "Администратор" as Admin #Gray 
 actor "Благотворитель" as Donor #Green
-participant "Платформа" as Platform #SkyBlue
-participant "Сервис\n интеграции" as IntegrationService #GreenYellow
+participant "Битрикс" as Bitrix #SkyBlue
+participant "Сервис\n интеграции" as IntService #GreenYellow
 participant "Сервис рассылки\n UnisenderGo" as UnisenderGo #GreenYellow
 participant "Сервис рассылки\n Unisender" as Unisender #GreenYellow
 participant "Платёжный сервис\n CloudPayments" as CloudPayments #GreenYellow
 participant "Платёжный сервис\n MixPlat" as MixPlat #GreenYellow
 
 ' Описание последовательности сообщений
-User -> Platform: Выполнена регистрация на Платформе
-== ФТ-001 ==
+== Регистрация на Платформе ==
+User -> Bitrix: Отправлены данные для регистрации
+
+== ФТ-020 (Согласие на рассылку при регистрации) ==
 alt Регистрация успешна
-    Platform -> IntegrationService: Регистрация на Платформе
-        par 
-        IntegrationService -> UnisenderGo: POST https://godocs.unisender.ru/web-api-ref#email-send
-        UnisenderGo --> IntegrationService: Webhook
-        IntegrationService -> UnisenderGo: POST https://godocs.unisender.ru/web-api-ref#email-validation-single
-        UnisenderGo --> IntegrationService: Webhook
+    Bitrix -> IntService: Регистрация на Платформе\n POST /email/send
+    activate IntService
+        alt Регистрация с согласием на рассылку
+            par 
+            IntService -> UnisenderGo: POST https://godocs.unisender.ru/web-api-ref#email-send 
+            UnisenderGo --> IntService: Webhook
+            IntService -> IntService: Добавление с список рассылки\n POST /email/subscribe
+            IntService -> Unisender: POST https://www.unisender.com/ru/support/api/messages/createemailmessage/
+            Unisender --> IntService: Webhook
+            end
+        else Регистрация без согласия на рассылку
+            IntService -> UnisenderGo: POST https://godocs.unisender.ru/web-api-ref#email-send 
+            UnisenderGo --> IntService: Webhook
         end
-    IntegrationService --> User: Сообщение с поздравляшками
+    IntService --> User: Письмо с благодарностью за регистрацию
+    deactivate 
 else Регистрация не удалась
-    Platform --> User: Ответ с ошибкой
+    Bitrix --> User: Ответ с ошибкой
 end 
 
-User -> Platform: Добавлено новое Событие
-== ФТ-002 ==
-Platform -> IntegrationService: Создано Событие
-IntegrationService -> UnisenderGo: POST https://godocs.unisender.ru/web-api-ref#email-send 
-UnisenderGo -> User: Ту-ту-ау, на Платформе создано новое Событие
+== ФТ-021 (Предложение создать Событие через 7 суток после регистрации) ==
+Bitrix -> IntService: Триггер об отправке письма\n POST /email/send
+alt Отправка письма
+    IntService -> UnisenderGo: POST https://godocs.unisender.ru/web-api-ref#email-send
+    UnisenderGo --> IntService: 200 OK
+    IntService --> User: Письмо с предложением создать Событие
+else Событие ранее создано
+    IntService --> Bitrix: Событие создано\n GET /event/{event_id}
+end
 
+== Создание События ==
+User -> Bitrix: Выполнен вход на Платформе
+Bitrix -> User: Вход успешен
+User -> Bitrix: Добавлено новое Событие
+Bitrix -> IntService: Триггер об отправке письма\n POST /email/send
+IntService -> IntService: Валидация данных письма
+IntService -> UnisenderGo: Отправка письма Администратору\n POST https://godocs.unisender.ru/web-api-ref#email-send
+
+== Модерация События == 
+UnisenderGo --> IntService: Событие пришло на Модерацию\n Webhook
+activate IntService
+Admin -> IntService: Запрос списка Событий на Модерацию
+IntService -> Admin: Список Событий на Модерацию
+Admin -> Admin: Просмотр События
+alt Событие одобрено для размещения на Платформе
+    Admin -> IntService: Одобрение События\n POST /event/{event_id}/approve
+    IntService -> Bitrix: Статус "Опубликовано"
+else Событие отклонено
+    Admin -> IntService: Отклонение События
+    IntService -> Bitrix: Статус "Отклонено"  
+end
+IntService -> IntService: Выбор шаблона письма
+IntService -> UnisenderGo: Отправка результата модерации\n POST /email/send
+IntService -> IntService: Обработка результатов отправки
+UnisenderGo --> User: Письмо о результатах модерации
+    par
+        IntService -> UnisenderGo: Отправка письма о новом Сборе\n POST /email/send
+        UnisenderGo -> User: На Платформе опубликовано новое Событие
+        UnisenderGo -> Donor: На Платформе опубликовано новое Событие
+    end
+deactivate
+
+== Завершение События ==
+IntService -> IntService: Выбор шаблона письма о результатах сбора
+IntService -> UnisenderGo: Отправка письма о завершении сбора\n POST /email/send
+UnisenderGo --> User: Письмо о завершении Сбора
+UnisenderGo --> Donor: Письмо о завершении Сбора
+
+== Предложение создать События за 14 суток до др ==
+Bitrix -> IntService: Триггер о дате Пользователя
+IntService -> UnisenderGo: Отправка письма с предложением создать Событие\n POST /email/send
+UnisenderGo --> User: Письмо с предложением создать Событие к др
 
 @enduml
