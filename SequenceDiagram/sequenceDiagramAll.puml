@@ -4,8 +4,8 @@
 actor "Пользователь" as User #Red
 actor "Благотворитель" as Donor #Green
 actor "Администратор" as Admin #Gray 
-participant "Битрикс" as Bitrix #SkyBlue
-participant "Сервис\n интеграции" as IntService #GreenYellow
+participant "Битрикс" as Bitrix #RosyBrown
+participant "Сервис\n интеграции" as IntService #SkyBlue
 participant "Сервис рассылки\n UnisenderGo" as UnisenderGo #GreenYellow
 participant "Сервис рассылки\n Unisender" as Unisender #GreenYellow
 

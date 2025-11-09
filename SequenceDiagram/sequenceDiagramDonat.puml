@@ -2,28 +2,41 @@
 
 ' Определение участников диаграммы
 actor "Благотворитель" as Donor #Green
-participant "Битрикс" as Bitrix #SkyBlue
-participant "Сервис\n интеграции" as IntService #GreenYellow
+participant "Битрикс" as Bitrix #RosyBrown
+participant "Сервис\n интеграции" as IntService #SkyBlue
 participant "Сервис рассылки\n UnisenderGo" as UnisenderGo #GreenYellow
 participant "Сервис рассылки\n Unisender" as Unisender #GreenYellow
 participant "Платёжный сервис\n CloudPayments" as CloudPayments #GreenYellow
 
 ' Описание последовательности сообщений
 Donor -> Bitrix: Открыть форму оплаты пожертвований
-
-    alt Оплата с согласием на рассылку
-        par 
-            IntService -> IntService: Добавление с список рассылки\n POST /email/subscribe
-            IntService -> Unisender: POST https://www.unisender.com/ru/support/api/messages/createemailmessage/
-            Unisender --> IntService: Webhook
-        else
-            Bitrix -> IntService: Запустить триггер оплаты
-            IntService -> CloudPayments: Платёж
-        end
-    else Оплата без согласия на рассылку
-        Bitrix -> IntService: Запустить триггер оплаты
-        IntService -> CloudPayments: Платёж
+Bitrix -> IntService: Запустить триггер оплаты
+activate IntService
+    opt Оплата с согласием на рассылку
+        IntService -> IntService: Добавление с список рассылки\n POST /email/subscribe
+        IntService -> Unisender: POST https://www.unisender.com/ru/support/api/messages/createemailmessage/
+        Unisender --> IntService: Webhook
     end
+IntService -> IntService: валидация email и дедупликация
+alt email валиден и не дубликат
+    IntService -> UnisenderGo: POST /email/send
+    loop до 3 раз, если есть ошибка
+        UnisenderGo --> IntService: 200 OK | 429/5xx error
+        alt 200 OK
+            IntService -> IntService: log(sent, message_id)
+        else error и попытки не исчерпаны
+            IntService -> IntService: wait (Timer)
+        else попытки исчерпаны
+            IntService -> IntService: log(error, details)
+        end
+    end
+else
+    IntService -> IntService: log(error: invalid/duplicate)
+end
+
+UnisenderGo -> IntService: Webhook
+IntService -> IntService: Обновление статуса оплаты
+
 
 alt Платёж прошёл успешно
     CloudPayments -> IntService: callback со статусом success
@@ -34,6 +47,8 @@ end
 
 IntService -> IntService: Выбор шаблона письма
 IntService -> UnisenderGo: Отправка письма
+IntService -> Bitrix: Передача статуса платежа на экране
+deactivate
 UnisenderGo --> Donor: Письма с благодарностью
 
 @enduml
