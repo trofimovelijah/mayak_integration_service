@@ -2,6 +2,7 @@
 
 ' Определение участников диаграммы
 actor "Пользователь" as User #Red
+actor "Благотворитель" as Donor #Green
 actor "Администратор" as Admin #Gray 
 participant "Битрикс" as Bitrix #SkyBlue
 participant "Сервис\n интеграции" as IntService #GreenYellow
@@ -18,11 +19,12 @@ alt Регистрация успешна
     activate IntService
         alt Регистрация с согласием на рассылку
             par 
-            IntService -> UnisenderGo: POST https://godocs.unisender.ru/web-api-ref#email-send 
-            UnisenderGo --> IntService: Webhook
-            IntService -> IntService: Добавление с список рассылки\n POST /email/subscribe
-            IntService -> Unisender: POST https://www.unisender.com/ru/support/api/messages/createemailmessage/
-            Unisender --> IntService: Webhook
+                IntService -> UnisenderGo: POST https://godocs.unisender.ru/web-api-ref#email-send 
+                UnisenderGo --> IntService: Webhook
+            else
+                IntService -> IntService: Добавление с список рассылки\n POST /email/subscribe
+                IntService -> Unisender: POST https://www.unisender.com/ru/support/api/messages/createemailmessage/
+                Unisender --> IntService: Webhook
             end
         else Регистрация без согласия на рассылку
             IntService -> UnisenderGo: POST https://godocs.unisender.ru/web-api-ref#email-send 
@@ -46,14 +48,6 @@ end
 
 newpage
 
-' Определение участников диаграммы
-actor "Пользователь" as User #Red
-actor "Администратор" as Admin #Gray 
-actor "Благотворитель" as Donor #Green
-participant "Битрикс" as Bitrix #SkyBlue
-participant "Сервис\n интеграции" as IntService #GreenYellow
-participant "Сервис рассылки\n UnisenderGo" as UnisenderGo #GreenYellow
-
 == Создание События ==
 User -> Bitrix: Выполнен вход на Платформе
 Bitrix -> User: Вход успешен
@@ -65,6 +59,7 @@ IntService -> UnisenderGo: Отправка письма Администрат�
 == Модерация События == 
 UnisenderGo --> IntService: Событие пришло на Модерацию\n Webhook
 activate IntService
+activate Admin
 Admin -> IntService: Запрос списка Событий на Модерацию
 IntService -> Admin: Список Событий на Модерацию
 Admin -> Admin: Просмотр События
@@ -75,16 +70,18 @@ else Событие отклонено
     Admin -> IntService: Отклонение События
     IntService -> Bitrix: Статус "Отклонено"  
 end
+deactivate Admin
 IntService -> IntService: Выбор шаблона письма
 IntService -> UnisenderGo: Отправка результата модерации\n POST /email/send
 IntService -> IntService: Обработка результатов отправки
 UnisenderGo --> User: Письмо о результатах модерации
     par
         IntService -> UnisenderGo: Отправка письма о новом Сборе\n POST /email/send
+        deactivate IntService
         UnisenderGo -> User: На Платформе опубликовано новое Событие
+    else
         UnisenderGo -> Donor: На Платформе опубликовано новое Событие
     end
-deactivate
 
 == Завершение События ==
 IntService -> IntService: Выбор шаблона письма о результатах сбора

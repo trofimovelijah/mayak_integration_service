@@ -16,6 +16,7 @@ Donor -> Bitrix: Открыть форму оплаты пожертвовани
             IntService -> IntService: Добавление с список рассылки\n POST /email/subscribe
             IntService -> Unisender: POST https://www.unisender.com/ru/support/api/messages/createemailmessage/
             Unisender --> IntService: Webhook
+        else
             Bitrix -> IntService: Запустить триггер оплаты
             IntService -> CloudPayments: Платёж
         end
