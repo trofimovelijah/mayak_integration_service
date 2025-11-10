@@ -2,65 +2,80 @@
 
 ' Определение участников диаграммы
 actor "Благотворитель" as Donor #Green
-participant "Битрикс" as Bitrix #RosyBrown
+participant "1С-\nБитрикс" as Bitrix #RosyBrown
 participant "Сервис\n интеграции" as IntService #SkyBlue
 participant "Сервис рассылки\n UnisenderGo" as UnisenderGo #GreenYellow
-participant "Платёжный сервис\n CloudPayments" as CloudPayments #GreenYellow
 participant "Сервис рассылки\n Unisender" as Unisender #GreenYellow
+participant "Платёжный сервис\n CloudPayments" as CloudPayments #Orange
 
 ' Описание последовательности сообщений
 == Оформление подписки ==
 Donor -> Bitrix: Заполнить ритуалы подписки
-Bitrix -> IntService: Запустить триггер подписки
-IntService -> CloudPayments: Создать подписку
+Bitrix -> IntService: Запустить триггер подписки\n POST /subscriptions/create
 activate IntService
-CloudPayments -> IntService: callback успеха
-IntService -> IntService: Выполнить валидацию email и суммы
 
     opt Оплата с согласием на рассылку
-        IntService -> IntService: Добавление с список рассылки\n POST /email/subscribe
-        IntService -> Unisender: POST https://www.unisender.com/ru/support/api/messages/createemailmessage/
+        IntService -> Unisender: POST https://www.unisender.com/ru/support/api/messages/createemailmessage/\n POST /email/subscribe
         Unisender --> IntService: Webhook
     end
 
+IntService -> IntService: Выполнить валидацию email и суммы
+IntService -> CloudPayments: POST /subscriptions
+activate CloudPayments
+CloudPayments --> IntService: статус подписки
+deactivate CloudPayments
 IntService -> IntService: Выбор шаблона письма
 IntService -> UnisenderGo: Отправка письма с деталями о подписке\n POST /email/send
+activate UnisenderGo
 deactivate IntService
-UnisenderGo --> Donor: Письмо с деталями о подписке
+UnisenderGo --> Donor: Письмо с деталями о подписке (ФТ-009)
+deactivate UnisenderGo
 
 == Ежемесяные списания ==
 
 CloudPayments -> IntService: Вернуть результат списания
+activate CloudPayments
 activate IntService
 alt Успешное списание
     IntService -> IntService: Выбор шаблона письма (обычное или 12-е)
+    IntService -> UnisenderGo: POST /email/send
+    activate UnisenderGo
+    UnisenderGo --> Donor: Письмо благодарности Благодарителю
 else Неудачное списание
-    IntService -> IntService: Выбор шаблона письма
-        loop 1-я попытка
-            IntService -> IntService: Подготовить шаблон письма об ошибке
-        else 2-3 попытки
-            IntService -> IntService: Подготовить шаблон письма предупреждения
-        else 4-я попытка
-            IntService -> IntService: Подготовить шаблон письма отмены подписки
-            IntService -> CloudPayments: Отменить подписку
-            CloudPayments --> IntService: callback
-        end
-end
-IntService -> UnisenderGo: Отправка письма о списании\n POST /email/send
-UnisenderGo --> IntService: Отправка письма
+    loop 1-я попытка
+        IntService -> IntService: Подготовить шаблон письма об ошибке
+    else 2-3 попытки
+        IntService -> IntService: Подготовить шаблон письма предупреждения
+    else 4-я попытка
+        IntService -> IntService: Подготовить шаблон письма отмены подписки
+        IntService -> CloudPayments: Отменить подписку
+        CloudPayments --> IntService: callback
+    end
+IntService -> CloudPayments: DELETE /subscriptions/{subscription_id}
+CloudPayments --> IntService: Статус отмены
+deactivate CloudPayments
+
+IntService -> UnisenderGo: POST /email/send
+UnisenderGo --> IntService: Webhook
+UnisenderGo --> Donor: Письмо об ошибке или отмене подписки
+deactivate UnisenderGo
+end 
 deactivate IntService
-UnisenderGo --> Donor: Отправка письма
 
 == Ручная отмена подписки ==
 Donor -> Bitrix: Заполнить ритуалы отмены подписки
-Bitrix -> IntService: Запустить триггер отмены подписки
+Bitrix -> IntService: Запустить триггер отмены подписки\n POST /subscriptions/{subscription_id}/cancel
 activate IntService
 IntService -> IntService: Подготовить письмо об отмене подписки
-IntService -> CloudPayments: Отменить подписку
-CloudPayments --> IntService: callback
+IntService -> CloudPayments: Отменить подписку\nDELETE /subscriptions/{subscription_id}
+activate CloudPayments
+CloudPayments --> IntService: статус отмены
+deactivate CloudPayments
 IntService -> UnisenderGo: Отправка письма с деталями об отмене подписки\n POST /email/send
+activate UnisenderGo
 UnisenderGo --> IntService: Webhook
 deactivate IntService
-UnisenderGo --> Donor: Прощальное письмо
+UnisenderGo --> Donor: Прощальное письмо (по ФТ-011)
+deactivate UnisenderGo
 
 @enduml
