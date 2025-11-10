@@ -20,10 +20,10 @@ IntService -> IntService: Проверка дедупликации + валид
 alt Регистрация успешна
     opt
         IntService -> IntService: Добавление с список рассылки\n POST /email/subscribe
-        IntService -> Unisender: POST https://www.unisender.com/ru/support/api/messages/createemailmessage/\n POST /api/subscribers
+        IntService -> Unisender: POST https://www.unisender.com/ru/support/api/messages/createemailmessage/\n POST /email/subscribers
         Unisender --> IntService: Webhook        
     end
-    IntService -> UnisenderGo: POST https://godocs.unisender.ru/web-api-ref#email-send 
+    IntService -> UnisenderGo: POST https://godocs.unisender.ru/web-api-ref#email-send\n POST /email/send
     UnisenderGo --> IntService: Webhook
     IntService --> Bitrix: 200 ОК
     IntService --> User: Письмо с благодарностью за регистрацию
@@ -35,7 +35,7 @@ else Регистрация не удалась
 end 
 
 == ФТ-021 Предложение создать Событие через 7 суток после регистрации ==
-Bitrix -> IntService: Триггер об отправке письма
+Bitrix -> IntService: Триггер об отправке письма\n POST /email/send
 activate IntService
 IntService --> IntService: Проверка создания События
 alt Отправка письма
@@ -43,11 +43,9 @@ alt Отправка письма
     UnisenderGo --> IntService: 200 OK
     IntService --> User: Письмо с предложением создать Событие
 else Событие ранее создано
-    IntService --> Bitrix: Событие создано\n GET /event/{event_id}
-    deactivate
+    IntService --> Bitrix: Событие создано ранее\n GET /event/{event_id}
+    deactivate IntService
 end
-
-newpage
 
 == ФТ-024 Создание События и отправка его на Модерацию ==
 User -> Bitrix: Выполнен вход на Платформе
@@ -59,11 +57,13 @@ deactivate Bitrix
 activate IntService
 IntService -> IntService: Валидация данных письма
 IntService -> UnisenderGo: Отправка письма Администратору\n POST https://godocs.unisender.ru/web-api-ref#email-send\n POST /email/send
-activate UnisenderGo
 deactivate IntService
+activate UnisenderGo
+
+newpage
 
 == ФТ-025, ФТ-026 Модерация События == 
-UnisenderGo --> IntService: Событие пришло на Модерацию\n Webhook
+UnisenderGo --> IntService: Событие пришло на Модерацию\n Webhook 200 OK {email_id}
 activate IntService
 deactivate UnisenderGo
 Admin -> IntService: Запрос списка Событий на Модерацию\n GET /events?status=pending_moderation
@@ -84,52 +84,49 @@ alt Событие одобрено для размещения на Платф�
     UnisenderGo --> User: Письмо: Событие опубликовано! (ФТ-025)
     deactivate UnisenderGo
 else Событие отклонено
-    Admin -> IntService: Отклонение События
+    Admin -> IntService: Отклонение События\n POST /event/{event_id}/reject
     activate IntService
-    IntService -> Bitrix: Статус "Отклонено"  
+    IntService -> Bitrix: Статус "Отклонено"\n 200 OK {email_id}
     IntService -> UnisenderGo: POST /email/send
     activate UnisenderGo
-    UnisenderGo --> IntService: Webhook: delivered
+    UnisenderGo --> IntService: Webhook: delivered\n 200 OK {email_id}
     deactivate IntService
     UnisenderGo --> User: Письмо: Событие не прошло модерацию (ФТ-026)
     deactivate UnisenderGo
 end
 
-== ФТ-002 Уведомление всех подписчиков о новом Событии на Платформе ==
-IntService -> Unisender: POST /api/messages/send
-Unisender --> IntService: Webhook
-
 == ФТ-003, ФТ-006, ФТ-027 Завершение События ==
-Bitrix -> IntService: Триггер о завершении События
+Bitrix -> IntService: Триггер о завершении События\n POST /events/closed
 activate IntService
 IntService -> IntService: Выбор шаблона письма о результатах сбора
 deactivate IntService
+
 alt Сумма ненулевая
     par Уведомить автора События по ФТ-003
         IntService -> UnisenderGo: Отправка письма о завершении сбора\n POST /email/send
 activate IntService
 activate UnisenderGo
-        UnisenderGo --> IntService: Webhook
+        UnisenderGo --> IntService: Webhook\n 200 OK {email_id}
         UnisenderGo --> User: Письмо о завершении Сбора
     else Уведомить Благотворителей по ФТ-003
-        IntService -> UnisenderGo: Отправка письма о завершении сбора\n POST /email/messages/send
-        UnisenderGo --> IntService: Webhook        
+        IntService -> UnisenderGo: Отправка письма о завершении сбора\n POST /email/send
+        UnisenderGo --> IntService: Webhook\n 200 OK {email_id}    
         UnisenderGo --> Donor: Письмо о завершении Сбора
     end
 else Сумма сбора равна 0 по ФТ-027
     IntService -> UnisenderGo: Отправка письма о завершении сбора\n POST /email/send
-    UnisenderGo --> IntService: Webhook
+    UnisenderGo --> IntService: Webhook\n 200 OK {email_id}
 deactivate IntService
     UnisenderGo --> User: Письмо о завершении Сбора создателю сбора
 deactivate UnisenderGo
 end
 
 == Предложение создать События за 14 суток до др ==
-Bitrix -> IntService: Триггер о дате Пользователя
+Bitrix -> IntService: Триггер о дате Пользователя\n POST /emails/send
 activate IntService
 IntService -> UnisenderGo: Отправка письма с предложением создать Событие\n POST /email/send
 activate UnisenderGo
-UnisenderGo --> IntService: Webhook
+UnisenderGo --> IntService: Webhook\n 200 OK {email_id}
 deactivate IntService
 UnisenderGo --> User: Письмо с предложением создать Событие к др
 deactivate UnisenderGo

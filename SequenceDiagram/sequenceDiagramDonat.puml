@@ -14,8 +14,8 @@ activate Bitrix
 Bitrix -> IntService: Запустить триггер оплаты\nPOST /donations/process
 activate IntService
     opt Оплата с согласием на рассылку
-        IntService -> Unisender: POST https://www.unisender.com/ru/support/api/messages/createemailmessage/\n POST /email/subscribers
-        Unisender --> IntService: Webhook
+        IntService -> Unisender: POST /email/subscribers\nPOST https://www.unisender.com/ru/support/api/messages/createemailmessage/
+        Unisender --> IntService: Webhook\n 200 OK {email_id}
     end
 IntService -> IntService: валидация email и дедупликация
 IntService --> Bitrix: Сообщение о результатах валидации

@@ -15,8 +15,8 @@ Bitrix -> IntService: Запустить триггер подписки\n POST 
 activate IntService
 
     opt Оплата с согласием на рассылку
-        IntService -> Unisender: POST https://www.unisender.com/ru/support/api/messages/createemailmessage/\n POST /email/subscribe
-        Unisender --> IntService: Webhook
+        IntService -> Unisender: POST /api/subscribe\nPOST https://www.unisender.com/ru/support/api/messages/createemailmessage/
+        Unisender --> IntService: Webhook\n 200 OK {email_id}
     end
 
 IntService -> IntService: Выполнить валидацию email и суммы
@@ -27,6 +27,7 @@ deactivate CloudPayments
 IntService -> IntService: Выбор шаблона письма
 IntService -> UnisenderGo: Отправка письма с деталями о подписке\n POST /email/send
 activate UnisenderGo
+UnisenderGo --> IntService: Webhook\n 200 OK {email_id}
 deactivate IntService
 UnisenderGo --> Donor: Письмо с деталями о подписке (ФТ-009)
 deactivate UnisenderGo
@@ -47,16 +48,14 @@ else Неудачное списание
     else 2-3 попытки
         IntService -> IntService: Подготовить шаблон письма предупреждения
     else 4-я попытка
-        IntService -> IntService: Подготовить шаблон письма отмены подписки
-        IntService -> CloudPayments: Отменить подписку
         CloudPayments --> IntService: callback
     end
 IntService -> CloudPayments: DELETE /subscriptions/{subscription_id}
-CloudPayments --> IntService: Статус отмены
+CloudPayments --> IntService: Статус отмены\n 200 OK status=cancelled
 deactivate CloudPayments
 
 IntService -> UnisenderGo: POST /email/send
-UnisenderGo --> IntService: Webhook
+UnisenderGo --> IntService: Webhook\n 200 OK {email_id}
 UnisenderGo --> Donor: Письмо об ошибке или отмене подписки
 deactivate UnisenderGo
 end 
@@ -69,11 +68,11 @@ activate IntService
 IntService -> IntService: Подготовить письмо об отмене подписки
 IntService -> CloudPayments: Отменить подписку\nDELETE /subscriptions/{subscription_id}
 activate CloudPayments
-CloudPayments --> IntService: статус отмены
+CloudPayments --> IntService: статус отмены\n 200 OK status=cancelled
 deactivate CloudPayments
 IntService -> UnisenderGo: Отправка письма с деталями об отмене подписки\n POST /email/send
 activate UnisenderGo
-UnisenderGo --> IntService: Webhook
+UnisenderGo --> IntService: Webhook\n 200 OK {email_id}
 deactivate IntService
 UnisenderGo --> Donor: Прощальное письмо (по ФТ-011)
 deactivate UnisenderGo
