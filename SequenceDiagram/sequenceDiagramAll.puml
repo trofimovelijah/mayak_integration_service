@@ -26,7 +26,7 @@ alt Регистрация успешна
     IntService -> UnisenderGo: POST https://godocs.unisender.ru/web-api-ref#email-send\n POST /email/send
     UnisenderGo --> IntService: Webhook
     IntService --> Bitrix: 200 ОК
-    IntService --> User: Письмо с благодарностью за регистрацию
+    UnisenderGo --> User: Письмо с благодарностью за регистрацию
      
 else Регистрация не удалась
     IntService --> Bitrix: Ответ с ошибкой
@@ -41,9 +41,9 @@ IntService --> IntService: Проверка создания События
 alt Отправка письма
     IntService -> UnisenderGo: POST https://godocs.unisender.ru/web-api-ref#email-send\n POST /email/send
     UnisenderGo --> IntService: 200 OK
-    IntService --> User: Письмо с предложением создать Событие
+    UnisenderGo --> User: Письмо с предложением создать Событие
 else Событие ранее создано
-    IntService --> Bitrix: Событие создано ранее\n GET /event/{event_id}
+    IntService --> Bitrix: Событие создано ранее\n{event_id}
     deactivate IntService
 end
 
