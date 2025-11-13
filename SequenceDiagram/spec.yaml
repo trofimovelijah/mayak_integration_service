@@ -1,109 +1,76 @@
 openapi: 3.0.0
-servers:
-  - url: 'https://virtserver.swaggerhub.com/aosu/mayak_integration/1.0.0'
-    description: SwaggerHub API Auto Mocking
 info:
+  title: API интеграционного сервиса фонда «Дом с маяком»
   description: |
     Спецификация интеграционного сервиса для Благотворительного фонда «Дом с маякам».
-    
+
     ### Важные замечания
     - Все эндпоинты требуют аутентификацию через заголовок `Authorization: Bearer <token>`
     - Для всех операций записи (POST, PUT, DELETE) требуется заголовок `Idempotency-Key` с уникальным UUID
     - Повторные запросы с тем же Idempotency-Key вернут результат первоначального запроса без повторного выполнения операции
     - Для обработки ошибок 429 используйте заголовок `X-RateLimit-Reset`, указывающий время до сброса лимита
-  version: 1.0.0
-  title: API интеграционного сервиса фонда «Дом с маяком»
+  termsOfService: https://join.mayak.help/assets/Politika_obespecheniya_bezopasnosti_PD_k_prikazu_74_ot_29_11_24.pdf
   contact:
-    email: payment@mayak.help
-    url: 'https://join.mayak.help'
     name: по вопросам пожертвований
-  termsOfService: 'https://join.mayak.help/assets/Politika_obespecheniya_bezopasnosti_PD_k_prikazu_74_ot_29_11_24.pdf'
+    url: https://join.mayak.help
+    email: payment@mayak.help
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/aosu/mayak_integration/1.0.0
+  description: SwaggerHub API Auto Mocking
+security:
+- bearerAuth: []
 tags:
-  - name: Почтовые уведомления и рассылки
-    description: 'Операции, связанные с отправкой писем, массовых рассылок, уведомлений, webhooks Unisender и UnisenderGo.'
-  - name: События и модерация
-    description: 'Создание, модерация, статусы и получение событий платформы.'
-  - name: Платёжные операции и подписки
-    description: 'Пожертвования, рекуррентные платежи, webhooks CloudPayments, операции с подписками.'
-  - name: Администрирование
-    description: 'Операции с шаблонами писем со стороны Администратора'
-  - name: Статистика и мониторинг
-    description: 'Операции с логами, мониторингом и статистикой.'
+- name: Почтовые уведомления и рассылки
+  description: "Операции, связанные с отправкой писем, массовых рассылок, уведомлений, webhooks Unisender и UnisenderGo."
+- name: События и модерация
+  description: "Создание, модерация, статусы и получение событий платформы."
+- name: Платёжные операции и подписки
+  description: "Пожертвования, рекуррентные платежи, webhooks CloudPayments, операции с подписками."
+- name: Администрирование
+  description: Операции с шаблонами писем со стороны Администратора
+- name: Статистика и мониторинг
+  description: "Операции с логами, мониторингом и статистикой."
 paths:
-
-    # ============================================
-    # Почтовые уведомления и рассылки
-    # ============================================
   /email/send:
     post:
       tags:
-        - Почтовые уведомления и рассылки
+      - Почтовые уведомления и рассылки
       summary: Отправка письма (уведомления)
-      operationId: sendEmailUniversal
       description: |
         Отправка письма по различным бизнес-сценариям. Используйте различные наборы параметров в зависимости от типа письма.
+      operationId: sendEmailUniversal
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EmailSendRequest'
+              $ref: "#/components/schemas/EmailSendRequest"
       responses:
-        '200':
+        "200":
           description: Письмо успешно отправлено
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    enum: ['sent', 'queued']
-                    description: |
-                      Статус отправки:
-                      - `sent` — письмо немедленно отправлено
-                      - `queued` — письмо помещено в очередь (при высокой нагрузке)
-                  email_id:
-                    type: string
-                    format: uuid
-                    description: Уникальный идентификатор письма в системе интеграции
-                  message_id:
-                    type: string
-                    description: Идентификатор письма во внешней системе (UnisenderGo/Unisender)
-                  sent_at:
-                    type: string
-                    format: date-time
-                    description: Timestamp отправки (ISO 8601)
-                  retry_count:
-                    type: integer
-                    description: Количество повторных попыток (0 если отправлено с первой попытки)
-                    minimum: 0
-                    maximum: 3
-                required:
-                  - status
-                  - email_id
-                  - sent_at
+                $ref: "#/components/schemas/inline_response_200"
               example:
-                status: 'sent'
-                email_id: 'a1b2c3d4-5678-90ab-cdef-1234567890ab'
-                message_id: 'msg_9b11d0c3c08a44de'
-                sent_at: '2025-11-13T15:27:45.123Z'
+                status: sent
+                email_id: a1b2c3d4-5678-90ab-cdef-1234567890ab
+                message_id: msg_9b11d0c3c08a44de
+                sent_at: 2025-11-13T15:27:45.123Z
                 retry_count: 0
-        
-        '400':
+        "400":
           description: Некорректные параметры запроса (отсутствуют обязательные поля)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '401':
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
           description: Отсутствует или недействителен JWT токен
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '422':
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
           description: |
             Ошибка валидации данных.
 
@@ -113,300 +80,231 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationErrorResponse'
+                $ref: "#/components/schemas/ValidationErrorResponse"
               examples:
                 invalidEmail:
                   summary: Невалидный email адрес
                   value:
-                    error_code: 'INVALID_EMAIL'
-                    error_message: 'Email адрес не соответствует RFC 5322'
-                    email: 'invalid@email@example.com'
-                    timestamp: '2025-11-13T15:27:45.123Z'
-                
+                    error_code: INVALID_EMAIL
+                    error_message: Email адрес не соответствует RFC 5322
+                    email: invalid@email@example.com
+                    timestamp: 2025-11-13T15:27:45.123Z
                 duplicateEmail:
                   summary: Письмо уже отправлялось (дедупликация)
                   value:
-                    error_code: 'DUPLICATE_EMAIL_24H'
-                    error_message: 'Письмо с template_id=FT-022 уже было отправлено на адрес i***v@example.com менее 24 часов назад'
-                    template_id: 'FT-022'
-                    last_sent_at: '2025-11-13T10:15:30.456Z'
-                    timestamp: '2025-11-13T15:27:45.123Z'
-        
-        '429':
+                    error_code: DUPLICATE_EMAIL_24H
+                    error_message: Письмо с template_id=FT-022 уже было отправлено на адрес i***v@example.com менее 24 часов назад
+                    template_id: FT-022
+                    last_sent_at: 2025-11-13T10:15:30.456Z
+                    timestamp: 2025-11-13T15:27:45.123Z
+        "429":
           description: |
             Превышен лимит запросов (rate limiting).
             Обработка лимитов внешних API.
           headers:
             X-RateLimit-Reset:
+              description: Unix timestamp сброса лимита
               schema:
                 type: integer
-              description: Unix timestamp сброса лимита
               example: 1699884465
             Retry-After:
+              description: Секунды до следующей попытки
               schema:
                 type: integer
-              description: Секунды до следующей попытки
               example: 120
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RateLimitErrorResponse'
-        
-        '500':
+                $ref: "#/components/schemas/RateLimitErrorResponse"
+        "500":
           description: |
             Ошибка сервера или недоступность внешнего сервиса.
             Применяется логика повторов с экспоненциальной задержкой.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-
+                $ref: "#/components/schemas/ServerErrorResponse"
   /email/subscribers:
     post:
       tags:
-        - Почтовые уведомления и рассылки
+      - Почтовые уведомления и рассылки
       summary: Добавление email в лист рассылки Unisender
+      description: "Добавление email пользователя в список рассылки \nдля дальнейших действий по усмотрению Платформы.\n"
       operationId: addSubscriber
-      description: |
-        Добавление email пользователя в список рассылки 
-        для дальнейших действий по усмотрению Платформы.
-
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SubscriberRequest'
-
+              $ref: "#/components/schemas/SubscriberRequest"
       responses:
-        '200':
+        "200":
           description: Email успешно добавлен в список рассылки
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    enum: ['added', 'already_exists']
-                    description: |
-                      Статус добавления:
-                      - `added` — email успешно добавлен
-                      - `already_exists` — email уже был в списке
-                  subscriber_id:
-                    type: string
-                    format: uuid
-                    description: Уникальный ID подписчика в системе
-                  unisender_id:
-                    type: string
-                    description: ID подписчика в системе Unisender
-                  email:
-                    type: string
-                    format: email
-                    description: Email адрес (частично скрыт для безопасности)
-                required:
-                  - status
-                  - subscriber_id
+                $ref: "#/components/schemas/inline_response_200_1"
               example:
-                status: 'added'
-                subscriber_id: 'b2c3d4e5-6789-01ab-cdef-234567890abc'
-                unisender_id: '12345678'
-                email: 'i***v@example.com'
-        
-        '400':
+                status: added
+                subscriber_id: b2c3d4e5-6789-01ab-cdef-234567890abc
+                unisender_id: "12345678"
+                email: i***v@example.com
+        "400":
           description: Некорректные параметры запроса
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '422':
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
           description: Ошибка валидации email
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationErrorResponse'
-        
-        '429':
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        "429":
           description: Превышен лимит запросов
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RateLimitErrorResponse'
-        
-        '500':
+                $ref: "#/components/schemas/RateLimitErrorResponse"
+        "500":
           description: Ошибка при взаимодействии с Unisender API
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-
-  # Webhook UnisenderGo (пример: обработка статуса доставки)
+                $ref: "#/components/schemas/ServerErrorResponse"
   /webhooks/unisendergo/delivery:
     post:
       tags:
-        - Почтовые уведомления и рассылки
-      operationId: unisendergoDeliveryWebhook
+      - Почтовые уведомления и рассылки
       summary: Webhook статуса доставки от UnisenderGo
       description: |
         Обработка webhook уведомлений от UnisenderGo о статусе доставки писем.
-        
+
         **Возможные события:**
         - `delivered` — письмо доставлено
         - `opened` — письмо открыто
         - `clicked` — клик по ссылке в письме
         - `bounced` — письмо вернулось (hard/soft bounce)
         - `unsubscribed` — отписка от рассылки
-        
+
         **Безопасность:** Webhook подписан HMAC SHA-256 в заголовке `X-Unisender-Signature`
-      
+      operationId: unisendergoDeliveryWebhook
       parameters:
-        - in: header
-          name: X-Unisender-Signature
-          required: true
-          schema:
-            type: string
-          description: HMAC SHA-256 подпись тела запроса
-      
-      requestBody:
+      - name: X-Unisender-Signature
+        in: header
+        description: HMAC SHA-256 подпись тела запроса
         required: true
+        schema:
+          type: string
+      requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UnisenderGoWebhook'
-      
+              $ref: "#/components/schemas/UnisenderGoWebhook"
+        required: true
       responses:
-        '200':
+        "200":
           description: Webhook успешно обработан
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: 'received'
-        
-        '401':
+                $ref: "#/components/schemas/inline_response_200_2"
+        "401":
           description: Неверная подпись webhook
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-    # ============================================
-    # События
-    # ============================================
-
+                $ref: "#/components/schemas/ErrorResponse"
   /events:
     get:
       tags:
-        - События и модерация
+      - События и модерация
       summary: Получение списка Событий
-      operationId: moderationListEvent
       description: |
         Возвращает список Событий с возможностью фильтрации по статусу.
+      operationId: moderationListEvent
       parameters:
-        - in: query
-          name: status
-          description: |
-            Статус события для фильтрации. Возможные значения:
-              - 'pending_moderation' — на модерации
-              - 'published' — опубликовано
-              - 'rejected' — отклонено
-          required: true
-          schema:
-            type: string
-            enum:
-              - pending_moderation
-              - published
-              - rejected
-          example: pending_moderation
-        - in: query
-          name: page
-          description: Номер страницы для постраничной навигации.
-          required: false
-          schema:
-            type: integer
-            minimum: 1
-          example: 1
-        - in: query
-          name: limit
-          description: Количество Событий на странице (максимум 100)
-          required: false
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 20
-          example: 20
-
+      - name: status
+        in: query
+        description: |
+          Статус события для фильтрации. Возможные значения:
+            - 'pending_moderation' — на модерации
+            - 'published' — опубликовано
+            - 'rejected' — отклонено
+        required: true
+        schema:
+          type: string
+          enum:
+          - pending_moderation
+          - published
+          - rejected
+        example: pending_moderation
+      - name: page
+        in: query
+        description: Номер страницы для постраничной навигации.
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+        example: 1
+      - name: limit
+        in: query
+        description: Количество Событий на странице (максимум 100)
+        required: false
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          default: 20
+        example: 20
       responses:
-        '200':
+        "200":
           description: Список Событий успешно получен
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  total:
-                    type: integer
-                    description: Общее количество Событий по фильтру
-                  page:
-                    type: integer
-                  limit:
-                    type: integer
-                  total_pages:
-                    type: integer
-                  events:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/EventListItem'
+                $ref: "#/components/schemas/inline_response_200_3"
               example:
                 total: 42
                 page: 1
                 limit: 20
                 total_pages: 3
                 events:
-                  - event_id: 'e995f12b-abcd-4c2d-b174-bd622174807f'
-                    event_name: 'День рождения Маши'
-                    event_creator_email: 'm***a@example.com'
-                    created_at: '2025-11-10T14:30:00Z'
-                    status: 'pending_moderation'
-                    target_amount: 50000
-                    images_count: 5
-        
-        '400':
+                - event_id: e995f12b-abcd-4c2d-b174-bd622174807f
+                  event_name: День рождения Маши
+                  event_creator_email: m***a@example.com
+                  created_at: 2025-11-10T14:30:00Z
+                  status: pending_moderation
+                  target_amount: 50000
+                  images_count: 5
+        "400":
           description: Некорректные параметры запроса
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '401':
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
           description: Отсутствует или недействителен JWT токен
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Недостаточно прав (требуется роль Администратора)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
+                $ref: "#/components/schemas/ErrorResponse"
   /events/{event_id}:
     get:
       tags:
-        - События и модерация
+      - События и модерация
       summary: Получение деталей События
-      operationId: getEventDetails
       description: |
         Возвращает полную информацию о События для принятия решения по модерации.
 
         Пример полного объекта Event:
-        
+
         Все поля объекта содержат детальную информацию для модератора (администратора), необходимую для принятия решения об одобрении или отклонении События:
         - Идентификаторы (event_id, admin_id)
         - Текстовые данные (event_name, event_description)
@@ -415,1218 +313,915 @@ paths:
         - Статусы и метаданные (status, created_at, moderation_notes)
         - Информация о создателе (event_creator_name, event_creator_email)
         - Мультимедийные данные (images_count, image_urls)
+      operationId: getEventDetails
       parameters:
-        - in: path
-          name: event_id
-          required: true
-          schema:
-            type: string
-
+      - name: event_id
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: Детали События успешно получены
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EventDetails'
-        
-        '401':
+                $ref: "#/components/schemas/EventDetails"
+        "401":
           description: Отсутствует или недействителен JWT токен
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Недостаточно прав
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Событие не найдено
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
+                $ref: "#/components/schemas/ErrorResponse"
   /events/{event_id}/approve:
     post:
       tags:
-        - События и модерация
+      - События и модерация
       summary: Одобрение События
-      operationId: approveEvent
       description: |
         Одобряет событие по итогам модерации Администратором и переводит его в статус "published".
         Отправляет уведомление создателю События.
+      operationId: approveEvent
       parameters:
-        - in: path
-          name: event_id
-          required: true
-          description: Идентификатор события для одобрения
-          schema:
-            type: string
-            format: uuid
+      - name: event_id
+        in: path
+        description: Идентификатор события для одобрения
+        required: true
+        schema:
+          type: string
+          format: uuid
       requestBody:
         description: Данные для одобрения события администратором
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EventApproveRequest'
-
+              $ref: "#/components/schemas/EventApproveRequest"
+        required: true
       responses:
-        '200':
+        "200":
           description: Событие успешно одобрено
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: 'approved'
-                  event_id:
-                    type: string
-                    format: uuid
-                  new_status:
-                    type: string
-                    example: 'published'
-                  approved_at:
-                    type: string
-                    format: date-time
-                  approved_by:
-                    type: string
-                    format: uuid
-                    description: ID администратора
-                  notification_sent:
-                    type: boolean
-                    description: Отправлено ли письмо создателю
-                  email_id:
-                    type: string
-                    format: uuid
-                    description: ID отправленного письма
+                $ref: "#/components/schemas/inline_response_200_4"
               example:
-                status: 'approved'
-                event_id: 'e995f12b-abcd-4c2d-b174-bd622174807f'
-                new_status: 'published'
-                approved_at: '2025-11-13T15:30:00Z'
-                approved_by: '321efdce-174a-46eb-849c-c2ffbb1c8d60'
+                status: approved
+                event_id: e995f12b-abcd-4c2d-b174-bd622174807f
+                new_status: published
+                approved_at: 2025-11-13T15:30:00Z
+                approved_by: 321efdce-174a-46eb-849c-c2ffbb1c8d60
                 notification_sent: true
-                email_id: 'g7h8i9j0-1234-5abc-def6-7890abcdef12'
-        
-        '400':
+                email_id: g7h8i9j0-1234-5abc-def6-7890abcdef12
+        "400":
           description: Некорректные параметры
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '401':
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
           description: Отсутствует или недействителен JWT токен
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Недостаточно прав (требуется роль admin)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Событие не найдено
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '409':
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
           description: Конфликт статуса — Событие уже одобрено или отклонено
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
+                $ref: "#/components/schemas/ErrorResponse"
   /events/{event_id}/reject:
     post:
       tags:
-        - События и модерация
+      - События и модерация
       summary: Отклонение События
-      operationId: rejectEvent
       description: |
         Отклоняет событие по итогам модерации Администратором и переводит его в статус "rejected".
         Отправляет уведомление создателю События с вердикто отклонения от Администратора.
+      operationId: rejectEvent
       parameters:
-        - in: path
-          name: event_id
-          required: true
-          description: Идентификатор события для отклонения
-          schema:
-            type: string
-            format: uuid
+      - name: event_id
+        in: path
+        description: Идентификатор события для отклонения
+        required: true
+        schema:
+          type: string
+          format: uuid
       requestBody:
         description: Данные для отклонения события администратором
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EventRejectRequest'
-
+              $ref: "#/components/schemas/EventRejectRequest"
+        required: true
       responses:
-        '200':
+        "200":
           description: Событие успешно отклонено
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: 'rejected'
-                  event_id:
-                    type: string
-                    format: uuid
-                  new_status:
-                    type: string
-                    example: 'rejected'
-                  rejected_at:
-                    type: string
-                    format: date-time
-                  rejected_by:
-                    type: string
-                    format: uuid
-                  rejection_reason:
-                    type: string
-                  notification_sent:
-                    type: boolean
-                  email_id:
-                    type: string
-                    format: uuid
+                $ref: "#/components/schemas/inline_response_200_5"
               example:
-                status: 'rejected'
-                event_id: 'e995f12b-abcd-4c2d-b174-bd622174807f'
-                new_status: 'rejected'
-                rejected_at: '2025-11-13T15:30:00Z'
-                rejected_by: '321efdce-174a-46eb-849c-c2ffbb1c8d60'
-                rejection_reason: 'В описании События отсутствует информация о целевом использовании средств'
+                status: rejected
+                event_id: e995f12b-abcd-4c2d-b174-bd622174807f
+                new_status: rejected
+                rejected_at: 2025-11-13T15:30:00Z
+                rejected_by: 321efdce-174a-46eb-849c-c2ffbb1c8d60
+                rejection_reason: В описании События отсутствует информация о целевом использовании средств
                 notification_sent: true
-                email_id: 'h8i9j0k1-2345-6bcd-ef78-90abcdef1234'
-        
-        '400':
+                email_id: h8i9j0k1-2345-6bcd-ef78-90abcdef1234
+        "400":
           description: Некорректные параметры
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '401':
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
           description: Отсутствует или недействителен JWT токен
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Недостаточно прав
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Событие не найдено
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '409':
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
           description: Конфликт статуса
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-    # ============================================
-    # Платёжные операции и подписки
-    # ============================================
+                $ref: "#/components/schemas/ErrorResponse"
   /payments:
     post:
       tags:
-        - Платёжные операции и подписки
-      operationId: initiatePayment
+      - Платёжные операции и подписки
       summary: Инициирование платежа
       description: |
         Инициирует разовый платеж (пожертвование) через платежную систему CloudPayments.
-        
+
         - Персонализация по сумме пожертвования
         - Пожертвования >= 50000₽ требуют дополнительных проверок
-      
+      operationId: initiatePayment
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PaymentRequest'
-      
+              $ref: "#/components/schemas/PaymentRequest"
+        required: true
       responses:
-        '200':
+        "200":
           description: Платеж успешно инициирован
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    enum: ['initiated', 'pending_3ds']
-                    description: |
-                      Статус платежа:
-                      - `initiated` — платеж инициирован
-                      - `pending_3ds` — требуется 3D-Secure
-                  payment_id:
-                    type: string
-                    description: Внутренний ID платежа
-                  transaction_id:
-                    type: string
-                    description: ID транзакции в CloudPayments
-                  payment_url:
-                    type: string
-                    format: uri
-                    description: URL для завершения платежа (если требуется 3D-Secure)
-                  amount:
-                    type: number
-                    format: float
-                  currency:
-                    type: string
-                  is_first_donation:
-                    type: boolean
-                    description: Первое ли это пожертвование от данного благотворителя
-                  requires_additional_verification:
-                    type: boolean
-                    description: Требуется ли дополнительная проверка
+                $ref: "#/components/schemas/inline_response_200_6"
               example:
-                status: 'initiated'
-                payment_id: 'pay_1a2b3c4d5e6f7890'
-                transaction_id: '12345678'
-                amount: 5000.00
-                currency: 'RUB'
+                status: initiated
+                payment_id: pay_1a2b3c4d5e6f7890
+                transaction_id: "12345678"
+                amount: 5000.0
+                currency: RUB
                 is_first_donation: true
                 requires_additional_verification: false
-        
-        '400':
+        "400":
           description: Некорректные параметры
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '422':
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
           description: Ошибка валидации платежа
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationErrorResponse'
-        
-        '429':
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        "429":
           description: Превышен лимит запросов
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RateLimitErrorResponse'
-        
-        '500':
+                $ref: "#/components/schemas/RateLimitErrorResponse"
+        "500":
           description: Ошибка при создании платежа
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-
+                $ref: "#/components/schemas/ServerErrorResponse"
   /subscriptions:
     post:
       tags:
-        - Платёжные операции и подписки
-      operationId: createSubscription
+      - Платёжные операции и подписки
       summary: Создание подписки на рекуррентные платежи
       description: |
         Создает подписку на регулярные (рекуррентные) пожертвования.
-        
+
         **Жизненный цикл:**
         1. Валидация email и суммы
         2. Создание подписки в CloudPayments
         3. Отправка письма с деталями подписки
         4. Если agree_newsletter=true — добавление email в рассылку
-      
+      operationId: createSubscription
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SubscriptionRequest'
-      
+              $ref: "#/components/schemas/SubscriptionRequest"
+        required: true
       responses:
-        '200':
+        "200":
           description: Подписка успешно создана
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: 'active'
-                  subscription_id:
-                    type: string
-                    description: Внутренний ID подписки
-                  cloudpayments_subscription_id:
-                    type: string
-                    description: ID подписки в CloudPayments
-                  amount:
-                    type: number
-                    format: float
-                    description: Сумма платежа в рублях (для хранения, не в копейках)
-                  frequency:
-                    type: string
-                    enum: ['monthly', 'quarterly', 'annually']
-                    description: Периодичность списаний
-                  next_charge_date:
-                    type: string
-                    format: date
-                    description: Дата следующего списания
-                  notification_sent:
-                    type: boolean
-                    description: Отправлено ли письмо (ФТ-009)
-                  email_id:
-                    type: string
-                    format: uuid
-                  manage_url:
-                    type: string
-                    format: uri
-                    description: URL для управления подпиской
+                $ref: "#/components/schemas/inline_response_200_7"
               example:
-                status: 'active'
-                subscription_id: 'sub_3c4d5e6f7890abcd'
-                cloudpayments_subscription_id: '87654321'
-                amount: 1000.00
-                frequency: 'monthly'
-                next_charge_date: '2025-12-01'
+                status: active
+                subscription_id: sub_3c4d5e6f7890abcd
+                cloudpayments_subscription_id: "87654321"
+                amount: 1000.0
+                frequency: monthly
+                next_charge_date: 2025-12-01
                 notification_sent: true
-                email_id: 'i9j0k1l2-3456-7cde-f890-1abcdef23456'
-                manage_url: 'https://join.mayak.help/manage-subscription/sub_3c4d5e6f7890abcd'
-        
-        '400':
+                email_id: i9j0k1l2-3456-7cde-f890-1abcdef23456
+                manage_url: https://join.mayak.help/manage-subscription/sub_3c4d5e6f7890abcd
+        "400":
           description: Некорректные параметры
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '422':
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
           description: Ошибка валидации подписки
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationErrorResponse'
-        
-        '429':
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        "429":
           description: Превышен лимит запросов
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RateLimitErrorResponse'
-        
-        '500':
+                $ref: "#/components/schemas/RateLimitErrorResponse"
+        "500":
           description: Ошибка при создании подписки
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-
+                $ref: "#/components/schemas/ServerErrorResponse"
   /subscriptions/{subscription_id}/cancel:
     delete:
       tags:
-        - Платёжные операции и подписки
-      operationId: cancelSubscription
+      - Платёжные операции и подписки
       summary: Отмена подписки на рекуррентные платежи
       description: |
         Отмена подписки на рекуррентные платежи по инициативе Благотворителя.
         Отправляет прощальное письмо.
-      
+      operationId: cancelSubscription
       parameters:
-        - in: path
-          name: subscription_id
-          required: true
-          schema:
-            type: string
-          description: Идентификатор подписки для отмены
-        
-      requestBody:
+      - name: subscription_id
+        in: path
+        description: Идентификатор подписки для отмены
         required: true
+        schema:
+          type: string
+      requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SubscriptionCancelRequest'
+              $ref: "#/components/schemas/SubscriptionCancelRequest"
+        required: true
       responses:
-        '200':
+        "200":
           description: Подписка успешно отменена
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: 'cancelled'
-                  subscription_id:
-                    type: string
-                  cancelled_at:
-                    type: string
-                    format: date-time
-                  notification_sent:
-                    type: boolean
-                  email_id:
-                    type: string
-                    format: uuid
-                  last_charge_date:
-                    type: string
-                    format: date
-                    description: Дата последнего успешного списания
-                  total_donations:
-                    type: number
-                    format: float
-                    description: Общая сумма пожертвований по подписке
-                  donations_count:
-                    type: integer
-                    description: Количество успешных списаний
+                $ref: "#/components/schemas/inline_response_200_8"
               example:
-                status: 'cancelled'
-                subscription_id: 'sub_3c4d5e6f7890abcd'
-                cancelled_at: '2025-11-13T15:30:00Z'
+                status: cancelled
+                subscription_id: sub_3c4d5e6f7890abcd
+                cancelled_at: 2025-11-13T15:30:00Z
                 notification_sent: true
-                email_id: 'j0k1l2m3-4567-8def-9012-3bcdef456789'
-                last_charge_date: '2025-11-01'
-                total_donations: 12000.00
+                email_id: j0k1l2m3-4567-8def-9012-3bcdef456789
+                last_charge_date: 2025-11-01
+                total_donations: 12000.0
                 donations_count: 12
-        
-        '400':
+        "400":
           description: Некорректные параметры
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Подписка не найдена
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '409':
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
           description: Подписка уже отменена
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Ошибка при отмене подписки
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServerErrorResponse'
-
+                $ref: "#/components/schemas/ServerErrorResponse"
   /webhooks/cloudpayments/pay:
     post:
       tags:
-        - Платёжные операции и подписки
-      operationId: cloudpaymentsPaymentSuccess
+      - Платёжные операции и подписки
       summary: Webhook успешного платежа от CloudPayments
       description: |
         Обработка webhook уведомления о успешном платеже от CloudPayments.
         Отправляет письмо благодарности Благотворителю.
-      
+      operationId: cloudpaymentsPaymentSuccess
       parameters:
-        - in: header
-          name: Content-HMAC
-          required: true
-          schema:
-            type: string
-          description: HMAC SHA-256 подпись для верификации
-      
-      requestBody:
+      - name: Content-HMAC
+        in: header
+        description: HMAC SHA-256 подпись для верификации
         required: true
+        schema:
+          type: string
+      requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CloudPaymentWebhook'
-      
+              $ref: "#/components/schemas/CloudPaymentWebhook"
+        required: true
       responses:
-        '200':
+        "200":
           description: Webhook успешно обработан
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 0
-                    description: Код успеха (CloudPayments требует code=0)
-
+                $ref: "#/components/schemas/inline_response_200_9"
   /webhooks/cloudpayments/fail:
     post:
       tags:
-        - Платёжные операции и подписки
-      operationId: cloudpaymentsPaymentFailed
+      - Платёжные операции и подписки
       summary: Webhook неудачного платежа от CloudPayments
       description: |
         Обработка webhook уведомления об ошибке платежа от CloudPayments.
         Отправляет письмо с информацией об ошибке и ссылкой для повтора.
-      
+      operationId: cloudpaymentsPaymentFailed
       parameters:
-        - in: header
-          name: Content-HMAC
-          required: true
-          schema:
-            type: string
-      
-      requestBody:
+      - name: Content-HMAC
+        in: header
         required: true
+        schema:
+          type: string
+      requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CloudPaymentFailWebhook'
-      
+              $ref: "#/components/schemas/CloudPaymentFailWebhook"
+        required: true
       responses:
-        '200':
+        "200":
           description: Webhook успешно обработан
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 0
-
+                $ref: "#/components/schemas/inline_response_200_10"
   /webhooks/cloudpayments/subscription:
     post:
       tags:
-        - Платёжные операции и подписки
-      operationId: cloudpaymentsSubscriptionCharge
+      - Платёжные операции и подписки
       summary: Webhook ежемесячного списания по подписке
       description: |
         Обработка webhook от CloudPayments о регулярном списании по подписке.
-      
+      operationId: cloudpaymentsSubscriptionCharge
       parameters:
-        - in: header
-          name: Content-HMAC
-          required: true
-          schema:
-            type: string
-      
-      requestBody:
+      - name: Content-HMAC
+        in: header
         required: true
+        schema:
+          type: string
+      requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CloudPaymentSubscriptionWebhook'
-      
+              $ref: "#/components/schemas/CloudPaymentSubscriptionWebhook"
+        required: true
       responses:
-        '200':
+        "200":
           description: Webhook успешно обработан
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 0
-
-  # Администрирование и мониторинг
-    # ============================================
-    # Администрирование
-    # ============================================
+                $ref: "#/components/schemas/inline_response_200_10"
   /templates:
     get:
       tags:
-        - Администрирование
-      operationId: getTemplatesList
+      - Администрирование
       summary: Получение списка шаблонов писем
       description: Возвращает список всех шаблонов писем для редактирования в админ-панели
-      
+      operationId: getTemplatesList
       parameters:
-        - in: query
-          name: page
-          required: false
-          schema:
-            type: integer
-            default: 1
-            minimum: 1
-          description: Номер страницы
-        
-        - in: query
-          name: limit
-          required: false
-          schema:
-            type: integer
-            default: 50
-            minimum: 1
-            maximum: 100
-          description: Количество элементов на странице
-      
+      - name: page
+        in: query
+        description: Номер страницы
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          default: 1
+      - name: limit
+        in: query
+        description: Количество элементов на странице
+        required: false
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          default: 50
       responses:
-        '200':
+        "200":
           description: Список шаблонов получен
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  total:
-                    type: integer
-                  page:
-                    type: integer
-                  limit:
-                    type: integer
-                  templates:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/TemplateListItem'
-
+                $ref: "#/components/schemas/inline_response_200_11"
   /templates/{template_id}:
     get:
       tags:
-        - Администрирование
-      operationId: getTemplateDetails
+      - Администрирование
       summary: Получение деталей шаблона письма
       description: |
         Возвращает полную информацию о шаблоне письма для редактирования.
-        
+
         Содержит все параметры шаблона, необходимые для редактирования:
         - Идентификатор (template_id)
         - Метаинформация (subject, description, created_at, updated_at)
         - Содержимое (body_html, body_text)
         - Переменные для подстановки (variables — список {name, description, required})
         - Статистика использования (usage_count, last_used_at)
-      
+      operationId: getTemplateDetails
       parameters:
-        - in: path
-          name: template_id
-          required: true
-          schema:
-            type: string
-          description: Идентификатор шаблона письма
-          example: 'ФТ-022'
-      
+      - name: template_id
+        in: path
+        description: Идентификатор шаблона письма
+        required: true
+        schema:
+          type: string
+        example: ФТ-022
       responses:
-        '200':
+        "200":
           description: Детали шаблона получены
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TemplateDetails'
-        
-        '404':
+                $ref: "#/components/schemas/TemplateDetails"
+        "404":
           description: Шаблон не найден
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-    
-  /templates/{template_id}:
+                $ref: "#/components/schemas/ErrorResponse"
     put:
       tags:
-        - Администрирование
-      operationId: updateTemplate
+      - Администрирование
       summary: Обновление шаблона письма
       description: |
         Обновление содержимого и параметров шаблона письма.
-      
+      operationId: updateTemplate
       parameters:
-        - in: path
-          name: template_id
-          required: true
-          schema:
-            type: string
-        
-        - in: header
-          name: Idempotency-Key
-          required: true
-          schema:
-            type: string
-            format: uuid
-      
-      requestBody:
+      - name: template_id
+        in: path
         required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TemplateUpdateRequest'
-      
+              $ref: "#/components/schemas/TemplateUpdateRequest"
+        required: true
       responses:
-        '200':
+        "200":
           description: Шаблон успешно обновлен
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: 'updated'
-                  template_id:
-                    type: string
-                  updated_at:
-                    type: string
-                    format: date-time
-                  updated_by:
-                    type: string
-                    format: uuid
-        
-        '404':
+                $ref: "#/components/schemas/inline_response_200_12"
+        "404":
           description: Шаблон не найден
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        
-        '422':
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
           description: Ошибка валидации шаблона
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationErrorResponse'
-
+                $ref: "#/components/schemas/ValidationErrorResponse"
   /retry/list:
     get:
       tags:
-        - Администрирование
-      operationId: getUnsendEmailsList
+      - Администрирование
       summary: Список неотправленных писем
       description: |
         Возвращает список писем, которые не были отправлены из-за ошибок.
-        
+      operationId: getUnsendEmailsList
       parameters:
-        - in: query
-          name: date_from
-          required: false
-          schema:
-            type: string
-            format: date
-          description: Начало периода для фильтрации
-        
-        - in: query
-          name: date_to
-          required: false
-          schema:
-            type: string
-            format: date
-          description: Конец периода для фильтрации
-        
-        - in: query
-          name: template_id
-          required: false
-          schema:
-            type: string
-          description: Фильтр по шаблону письма
-        
-        - in: query
-          name: page
-          required: false
-          schema:
-            type: integer
-            default: 1
-        
-        - in: query
-          name: limit
-          required: false
-          schema:
-            type: integer
-            default: 50
-      
+      - name: date_from
+        in: query
+        description: Начало периода для фильтрации
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: date_to
+        in: query
+        description: Конец периода для фильтрации
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: template_id
+        in: query
+        description: Фильтр по шаблону письма
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 50
       responses:
-        '200':
+        "200":
           description: Список неотправленных писем получен
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  total:
-                    type: integer
-                  page:
-                    type: integer
-                  limit:
-                    type: integer
-                  unsend_emails:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/UnsendEmailItem'
-
+                $ref: "#/components/schemas/inline_response_200_13"
   /retry/send:
     post:
       tags:
-        - Администрирование
-      operationId: retrySendEmails
-      summary: Переотправка выбранных писем
+      - Администрирование
+      summary: Переотправка неудачно отправленного письма
       description: |
-        Ручная переотправка неудачно отправленных писем.
-      
+        Ручная переотправка конкретного неудачно отправленного письма по идентификатору.
+      operationId: retrySendEmail
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email_ids:
-                  type: array
-                  items:
-                    type: string
-                    format: uuid
-                  description: Массив ID неотправленных писем
-                  minItems: 1
-                  maxItems: 100
-              required:
-                - email_ids
-      
+              $ref: "#/components/schemas/retry_send_body"
+            example:
+              unsend_email_id: 7496ba97-6ad8-4c0b-8330-c441635d6e0a
+        required: true
       responses:
-        '200':
-          description: Письма успешно переотправлены
+        "200":
+          description: Письмо успешно переотправлено
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: 'retry_initiated'
-                  total_emails:
-                    type: integer
-                  successful:
-                    type: integer
-                  failed:
-                    type: integer
-
-    # ============================================
-    # Статистика и мониторинг
-    # ============================================
-
+                $ref: "#/components/schemas/inline_response_200_14"
+              example:
+                status: retry_initiated
+                successful: true
   /statistics/summary:
     get:
       tags:
-        - Статистика и мониторинг
-      operationId: getStatisticsSummary
+      - Статистика и мониторинг
       summary: Просмотр статистики коммуникаций
       description: |
         Возвращает агрегированную статистику по email коммуникациям.
-
+      operationId: getStatisticsSummary
       parameters:
-        - in: query
-          name: date_from
-          required: true
-          schema:
-            type: string
-            format: date
-          description: Начало периода
-        
-        - in: query
-          name: date_to
-          required: true
-          schema:
-            type: string
-            format: date
-          description: Конец периода
-        
-        - in: query
-          name: template_id
-          required: false
-          schema:
-            type: string
-          description: Фильтр по шаблону письма
-        
-        - in: query
-          name: group_by
-          required: false
-          schema:
-            type: string
-            enum: ['day', 'week', 'month', 'template']
-            default: 'day'
-          description: Группировка результатов
-      
+      - name: date_from
+        in: query
+        description: Начало периода
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: date_to
+        in: query
+        description: Конец периода
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: template_id
+        in: query
+        description: Фильтр по шаблону письма
+        required: false
+        schema:
+          type: string
+      - name: group_by
+        in: query
+        description: Группировка результатов
+        required: false
+        schema:
+          type: string
+          default: day
+          enum:
+          - day
+          - week
+          - month
+          - template
       responses:
-        '200':
+        "200":
           description: Статистика успешно получена
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StatisticsSummaryResponse'
-
-
+                $ref: "#/components/schemas/StatisticsSummaryResponse"
   /statistics/export/csv:
     get:
       tags:
-        - Статистика и мониторинг
-      operationId: exportStatisticsCSV
+      - Статистика и мониторинг
       summary: Экспорт статистики в CSV
       description: |
         Экспортирует статистику в CSV файл для анализа.
-        
+
         **Используется в:** ФТ-017 (формирование отчётов)
-      
+      operationId: exportStatisticsCSV
       parameters:
-        - in: query
-          name: date_from
-          required: true
-          schema:
-            type: string
-            format: date
-          description: Начало периода
-        
-        - in: query
-          name: date_to
-          required: true
-          schema:
-            type: string
-            format: date
-          description: Конец периода
-        
-        - in: query
-          name: template_id
-          required: false
-          schema:
-            type: string
-      
+      - name: date_from
+        in: query
+        description: Начало периода
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: date_to
+        in: query
+        description: Конец периода
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: template_id
+        in: query
+        required: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: CSV файл статистики
+          headers:
+            Content-Disposition:
+              description: attachment; filename="statistics_YYYY-MM-DD_YYYY-MM-DD.csv"
+              schema:
+                type: string
           content:
             text/csv:
               schema:
                 type: string
                 format: binary
-          headers:
-            Content-Disposition:
-              schema:
-                type: string
-              description: 'attachment; filename="statistics_YYYY-MM-DD_YYYY-MM-DD.csv"'
-
   /logs:
     get:
       tags:
-        - Статистика и мониторинг
-      operationId: getSystemLogs
+      - Статистика и мониторинг
       summary: Просмотр логов системы
       description: |
         Просмотр системных логов с фильтрацией.
-        
-        **Используется в:** НФТ-5.1 (логирование событий)
-      
+      operationId: getSystemLogs
       parameters:
-        - in: query
-          name: date_from
-          required: false
-          schema:
-            type: string
-            format: date-time
-          description: Начало периода
-        
-        - in: query
-          name: date_to
-          required: false
-          schema:
-            type: string
-            format: date-time
-          description: Конец периода
-        
-        - in: query
-          name: level
-          required: false
-          schema:
-            type: string
-            enum: ['INFO', 'WARNING', 'ERROR', 'CRITICAL']
-          description: Уровень логирования
-        
-        - in: query
-          name: component
-          required: false
-          schema:
-            type: string
-            enum: ['email', 'payment', 'subscription', 'moderation', 'webhook']
-          description: Компонент системы
-        
-        - in: query
-          name: search_text
-          required: false
-          schema:
-            type: string
-          description: Полнотекстовый поиск по сообщениям
-        
-        - in: query
-          name: page
-          required: false
-          schema:
-            type: integer
-            default: 1
-        
-        - in: query
-          name: limit
-          required: false
-          schema:
-            type: integer
-            default: 100
-            maximum: 500
-      
+      - name: date_from
+        in: query
+        description: Начало периода
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: date_to
+        in: query
+        description: Конец периода
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: level
+        in: query
+        description: Уровень логирования
+        required: false
+        schema:
+          type: string
+          enum:
+          - INFO
+          - WARNING
+          - ERROR
+          - CRITICAL
+      - name: component
+        in: query
+        description: Компонент системы
+        required: false
+        schema:
+          type: string
+          enum:
+          - email
+          - payment
+          - subscription
+          - moderation
+          - webhook
+      - name: search_text
+        in: query
+        description: Полнотекстовый поиск по сообщениям
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+      - name: limit
+        in: query
+        required: false
+        schema:
+          maximum: 500
+          type: integer
+          default: 100
       responses:
-        '200':
+        "200":
           description: Логи успешно получены
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LogsResponse'
-
+                $ref: "#/components/schemas/LogsResponse"
   /logs/export/csv:
     get:
       tags:
-        - Статистика и мониторинг
-      operationId: exportLogsCSV
+      - Статистика и мониторинг
       summary: Экспорт логов в CSV
       description: Экспорт системных логов в CSV файл
-      
+      operationId: exportLogsCSV
       parameters:
-        - in: query
-          name: date_from
-          required: true
-          schema:
-            type: string
-            format: date-time
-          description: Начало периода
-        
-        - in: query
-          name: date_to
-          required: true
-          schema:
-            type: string
-            format: date-time
-          description: Конец периода
-        
-        - in: query
-          name: level
-          required: false
-          schema:
-            type: string
-            enum: ['INFO', 'WARNING', 'ERROR', 'CRITICAL']
-        
-        - in: query
-          name: component
-          required: false
-          schema:
-            type: string
-      
+      - name: date_from
+        in: query
+        description: Начало периода
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: date_to
+        in: query
+        description: Конец периода
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: level
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - INFO
+          - WARNING
+          - ERROR
+          - CRITICAL
+      - name: component
+        in: query
+        required: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: CSV файл логов
           content:
             text/csv:
               schema:
                 type: string
                 format: binary
-
   /monitoring/services:
     get:
       tags:
-        - Статистика и мониторинг
-      operationId: getServicesStatus
+      - Статистика и мониторинг
       summary: Получение статуса сервисов и подсистем
       description: |
         Возвращает текущий статус всех интеграционных сервисов.
-        
-        **Используется в:** НФТ-5.2 (мониторинг здоровья интеграционных точек)
-      
+      operationId: getServicesStatus
       parameters:
-        - in: query
-          name: service_name
-          required: false
-          schema:
-            type: string
-          description: Фильтр по названию сервиса
-      
+      - name: service_name
+        in: query
+        description: Фильтр по названию сервиса
+        required: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: Статус сервисов получен
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServicesStatusResponse'
-
+                $ref: "#/components/schemas/ServicesStatusResponse"
   /monitoring/queues:
     get:
       tags:
-        - Администрирование
-      operationId: getQueuesStatus
+      - Статистика и мониторинг
       summary: Получение статуса очередей
       description: Возвращает статус внутренних очередей сообщений
-      
+      operationId: getQueuesStatus
       responses:
-        '200':
+        "200":
           description: Статус очередей получен
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QueuesStatusResponse'
-
+                $ref: "#/components/schemas/QueuesStatusResponse"
   /monitoring/alerts:
     get:
       tags:
-        - Статистика и мониторинг
-      operationId: getActiveAlerts
+      - Статистика и мониторинг
       summary: Получение активных алертов
       description: Возвращает список активных алертов и предупреждений
-      
+      operationId: getActiveAlerts
       parameters:
-        - in: query
-          name: severity
-          required: false
-          schema:
-            type: string
-            enum: ['low', 'medium', 'high', 'critical']
-          description: Фильтр по уровню опасности
-        
-        - in: query
-          name: limit
-          required: false
-          schema:
-            type: integer
-            default: 100
-      
+      - name: severity
+        in: query
+        description: Фильтр по уровню опасности
+        required: false
+        schema:
+          type: string
+          enum:
+          - low
+          - medium
+          - high
+          - critical
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 100
       responses:
-        '200':
+        "200":
           description: Список алертов получен
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AlertsResponse'
-
+                $ref: "#/components/schemas/AlertsResponse"
 components:
   schemas:
     EmailSendRequest:
       type: object
       properties:
         template_id:
-          description: идентификатор шаблона письма
           type: string
+          description: идентификатор шаблона письма
           format: uuid
           example: 37b51ee9-2c41-4403-9444-0818da6d22d0
         recipient_email:
-          description: адрес получателя письма
           type: string
+          description: адрес получателя письма
           format: email
         vars:
           type: object
@@ -1634,139 +1229,128 @@ components:
             Переменные для подстановки в шаблоне письма.
             Для каждого типа письма используйте только релевантные переменные. Список необходимых переменных см. в документации к шаблонам.
           example:
-            total_amount: '5000'
+            total_amount: "5000"
             event_name: День рождения Фонда
         list_id:
-          description: |
-            идентификатор списка благотворителей для данного События при отправке 
-            письма группе адресатов.
           type: string
+          description: "идентификатор списка благотворителей для данного События при отправке \nписьма группе адресатов.\n"
           format: uuid
           example: 93e6b492-1234-42be-8c67-d1c96d5a8d7c
         body:
-          description: тело письма в формате HTML. Используется при отправлении письма без шаблона.
           type: string
+          description: тело письма в формате HTML. Используется при отправлении письма без шаблона.
           format: html
           example: <p>Спасибо за участие в событии <b>День рождения Фонда</b>!</p>
         subject:
-          description: Тема письма для отправки. Используется при отправки без шаблона или при переопределении темы.
           type: string
+          description: Тема письма для отправки. Используется при отправки без шаблона или при переопределении темы.
           example: Поздравляем с успешным завершением сбора!
     SubscriberRequest:
+      required:
+      - list_id
+      - user_email
       type: object
       properties:
         user_email:
-          description: email в список для рассылки
           type: string
+          description: email в список для рассылки
           format: email
         list_id:
-          description: идентификатор списка рассылки
           type: string
+          description: идентификатор списка рассылки
           format: uuid
           example: 1f45babf-9315-4b97-99ef-abda630dafb7
         source:
+          type: string
           description: источник email для добавления в рассылку
-          type: string
-          enum:
-            - registration
-            - donation
           example: registration
+          enum:
+          - registration
+          - donation
         timestamp:
-          description: время рассылки
           type: string
+          description: время рассылки
           format: date-time
-      required:
-        - user_email
-        - list_id
     UnisenderGoWebhook:
+      required:
+      - email_id
+      - event
+      - message_id
+      - recipient_email
+      - template_id
       type: object
+      properties:
+        event:
+          type: string
+          description: Тип события
+          enum:
+          - delivered
+          - opened
+          - clicked
+          - bounced
+          - unsubscribed
+        email_id:
+          type: string
+          description: Внутренний ID письма в системе интеграции
+          format: uuid
+        message_id:
+          type: string
+          description: ID письма в UnisenderGo
+        recipient_email:
+          type: string
+          description: Email адрес получателя
+          format: email
+        template_id:
+          type: string
+          description: ID использованного шаблона
+        delivered_at:
+          type: string
+          description: (Для события 'delivered') Timestamp доставки
+          format: date-time
+        opened_at:
+          type: string
+          description: (Для события 'opened') Timestamp открытия
+          format: date-time
+        clicked_at:
+          type: string
+          description: (Для события 'clicked') Timestamp клика
+          format: date-time
+        url:
+          type: string
+          description: (Для события 'clicked') URL по которому кликнули
+          format: uri
+        bounce_type:
+          type: string
+          description: (Для события 'bounced') Тип bounce
+          enum:
+          - hard
+          - soft
+        bounce_reason:
+          type: string
+          description: (Для события 'bounced') Причина bounce
+        user_agent:
+          type: string
+          description: User-Agent браузера/почтового клиента
+        ip_address:
+          type: string
+          description: IP адрес получателя
+          format: ipv4
       description: |
         Webhook событие от UnisenderGo о статусе доставки писем.
-        
+
         **Возможные события:**
         - `delivered` — письмо доставлено
         - `opened` — письмо открыто
         - `clicked` — клик по ссылке
         - `bounced` — письмо вернулось
         - `unsubscribed` — отписка
-      
-      properties:
-        event:
-          type: string
-          enum: [delivered, opened, clicked, bounced, unsubscribed]
-          description: Тип события
-        
-        email_id:
-          type: string
-          format: uuid
-          description: Внутренний ID письма в системе интеграции
-        
-        message_id:
-          type: string
-          description: ID письма в UnisenderGo
-        
-        recipient_email:
-          type: string
-          format: email
-          description: Email адрес получателя
-        
-        template_id:
-          type: string
-          description: ID использованного шаблона
-        
-        delivered_at:
-          type: string
-          format: date-time
-          description: (Для события 'delivered') Timestamp доставки
-        
-        opened_at:
-          type: string
-          format: date-time
-          description: (Для события 'opened') Timestamp открытия
-        
-        clicked_at:
-          type: string
-          format: date-time
-          description: (Для события 'clicked') Timestamp клика
-        
-        url:
-          type: string
-          format: uri
-          description: (Для события 'clicked') URL по которому кликнули
-        
-        bounce_type:
-          type: string
-          enum: [hard, soft]
-          description: (Для события 'bounced') Тип bounce
-        
-        bounce_reason:
-          type: string
-          description: (Для события 'bounced') Причина bounce
-        
-        user_agent:
-          type: string
-          description: User-Agent браузера/почтового клиента
-        
-        ip_address:
-          type: string
-          format: ipv4
-          description: IP адрес получателя
-      
-      required:
-        - event
-        - email_id
-        - message_id
-        - recipient_email
-        - template_id
-
     EventListItem:
       type: object
-      description: Перечень всех Событий на модерации
       properties:
         event_id:
           type: string
-          format: uuid
           description: Идентификатор события
+          format: uuid
           example: e995f12b-abcd-4c2d-b174-bd622174807f
         event_name:
           type: string
@@ -1774,35 +1358,37 @@ components:
           example: Веломарафон помощи
         created_at:
           type: string
-          format: date-time
           description: Дата и время создания события
-          example: '2026-02-12T07:40:00Z'
+          format: date-time
+          example: 2026-02-12T07:40:00Z
         status:
           type: string
           description: Текущий статус события
           example: pending_moderation
         event_creator_email:
           type: string
+          description: "email Пользователя, создавшего Событие"
           format: email
-          description: 'email Пользователя, создавшего Событие'
           example: roberta@rabotta.ru
         target_amount:
           type: integer
           description: Целевая сумма сбора
           example: 30000
+      description: Перечень всех Событий на модерации
     EventDetails:
+      required:
+      - event_id
       type: object
-      description: Схема для вывода всех параметров выбранного События для принятия решения по модерации
       properties:
         event_id:
           type: string
-          format: uuid
           description: Идентификатор события
+          format: uuid
           example: e995f12b-abcd-4c2d-b174-bd622174807f
         admin_id:
           type: string
-          format: uuid
           description: Идентификатор администратора (внутренний ID или UUID).
+          format: uuid
           example: 321efdce-174a-46eb-849c-c2ffbb1c8d60
         event_name:
           type: string
@@ -1810,15 +1396,15 @@ components:
           example: Благотворительный марафон
         event_creator_email:
           type: string
+          description: "Email пользователя, создавшего  Cобытие."
           format: email
-          description: 'Email пользователя, создавшего  Cобытие.'
           example: roberta@rabotta.ru
         event_description:
           type: string
           description: Описание события.
         images_count:
           type: integer
-          description: 'Количество изображений, приложенных к Cобытию.'
+          description: "Количество изображений, приложенных к Cобытию."
           example: 3
         target_amount:
           type: integer
@@ -1826,19 +1412,22 @@ components:
           example: 50000
         event_date_from:
           type: string
-          format: date
           description: Дата начала Cобытия.
-          example: '2025-12-01'
-      required:
-        - event_id
+          format: date
+          example: 2025-12-01
+      description: Схема для вывода всех параметров выбранного События для принятия решения по модерации
     EventApproveRequest:
+      required:
+      - admin_id
+      - event_creator_email
+      - event_date_to
+      - event_name
       type: object
-      description: Схема для подтверждения (одобрения) события администратором.
       properties:
         admin_id:
           type: string
-          format: uuid
           description: Идентификатор администратора (внутренний ID или UUID).
+          format: uuid
           example: 321efdce-174a-46eb-849c-c2ffbb1c8d60
         event_name:
           type: string
@@ -1846,15 +1435,15 @@ components:
           example: Благотворительный марафон
         event_creator_email:
           type: string
+          description: "Email пользователя, создавшего  Cобытие."
           format: email
-          description: 'Email пользователя, создавшего  Cобытие.'
           example: roberta@rabotta.ru
         event_description:
           type: string
           description: Описание события.
         images_count:
           type: integer
-          description: 'Количество изображений, приложенных к Cобытию.'
+          description: "Количество изображений, приложенных к Cобытию."
           example: 3
         target_amount:
           type: integer
@@ -1862,31 +1451,31 @@ components:
           example: 50000
         event_date_from:
           type: string
-          format: date
           description: Дата начала Cобытия.
-          example: '2025-12-01'
+          format: date
+          example: 2025-12-01
         event_date_to:
           type: string
-          format: date
           description: Дата завершения Cобытия.
-          example: '2026-01-15'
+          format: date
+          example: 2026-01-15
         comment:
           type: string
           description: Комментарий администратора (необязательный).
           example: Все документы проверены
-      required:
-        - admin_id
-        - event_name
-        - event_creator_email
-        - event_date_to
+      description: Схема для подтверждения (одобрения) события администратором.
     EventRejectRequest:
+      required:
+      - admin_id
+      - event_creator_email
+      - event_name
+      - rejection_reason
       type: object
-      description: Схема для отклонения события администратором.
       properties:
         admin_id:
           type: string
-          format: uuid
           description: Идентификатор администратора.
+          format: uuid
           example: 321efdce-174a-46eb-849c-c2ffbb1c8d60
         event_name:
           type: string
@@ -1894,15 +1483,15 @@ components:
           example: Благотворительный марафон
         event_creator_email:
           type: string
+          description: "Email пользователя, создавшего Событие."
           format: email
-          description: 'Email пользователя, создавшего Событие.'
           example: roberta@rabotta.ru
         event_description:
           type: string
           description: Описание События.
         images_count:
           type: integer
-          description: 'Количество изображений, приложенных к Событию.'
+          description: "Количество изображений, приложенных к Событию."
           example: 3
         target_amount:
           type: integer
@@ -1910,22 +1499,20 @@ components:
           example: 50000
         event_date_finish:
           type: string
-          format: date
           description: Дата отклонения события (текущая дата).
-          example: '2025-12-01'
+          format: date
+          example: 2025-12-01
         rejection_reason:
           type: string
           description: Подробный комментарий/причина отказа.
           example: В предоставленных документах нет подтверждения цели сбора
-      required:
-        - admin_id
-        - event_name
-        - event_creator_email
-        - rejection_reason
-
+      description: Схема для отклонения события администратором.
     PaymentRequest:
+      required:
+      - currency
+      - donor_amount
+      - donor_email
       type: object
-      description: Запрос на инициирование платежа
       properties:
         donor_amount:
           type: integer
@@ -1934,685 +1521,919 @@ components:
             Например, для 5000 рублей передать 500000.
             **Формула:** amount_in_rubles * 100
           example: 500000
-        
         currency:
           type: string
-          enum: ['RUB']
           description: Валюта платежа (только рубли)
-          example: 'RUB'
-        
+          example: RUB
+          enum:
+          - RUB
         donor_email:
           type: string
-          format: email
           description: Email благотворителя
-      
-      required:
-        - donor_amount
-        - currency
-        - donor_email
-      
+          format: email
+      description: Запрос на инициирование платежа
     SubscriptionRequest:
+      required:
+      - currency
+      - event_id
+      - frequency
+      - recurrent_amount
+      - recurrent_email
       type: object
-      description: Запрос на создание рекуррентной подписки
       properties:
         recurrent_email:
           type: string
-          format: email
           description: Email рекуррентного благотворителя
-        
+          format: email
         recurrent_amount:
           type: integer
           description: |
             Сумма платежа в копейках (ежемесячная).
             **Формула:** amount_in_rubles * 100
           example: 100000
-        
         currency:
           type: string
-          enum: ['RUB']
-          example: 'RUB'
-        
+          example: RUB
+          enum:
+          - RUB
         frequency:
           type: string
-          enum: ['monthly', 'quarterly', 'semi_annually', 'annually']
           description: |
             Периодичность списаний:
             - monthly — каждый месяц
             - quarterly — раз в квартал (3 месяца)
             - semi_annually — два раза в год
             - annually — один раз в год
-          example: 'monthly'
-        
+          example: monthly
+          enum:
+          - monthly
+          - quarterly
+          - semi_annually
+          - annually
         event_id:
           type: string
-          format: uuid
           description: Идентификатор События для подписки
-        
+          format: uuid
         agree_newsletter:
           type: boolean
           description: Согласие на рассылку
-        
         start_date:
           type: string
+          description: "Дата первого списания (опционально, по умолчанию сегодня)"
           format: date
-          description: Дата первого списания (опционально, по умолчанию сегодня)
-      
-      required:
-        - recurrent_email
-        - recurrent_amount
-        - currency
-        - frequency
-        - event_id
-
+      description: Запрос на создание рекуррентной подписки
     SubscriptionCancelRequest:
+      required:
+      - donor_email
+      - reason
       type: object
-      description: Запрос на отмену подписки
       properties:
         donor_email:
           type: string
-          format: email
           description: Email благотворителя
-        
+          format: email
         reason:
           type: string
-          enum: ['user_requested', 'failed_after_4_retries']
           description: |
             Причина отмены:
             - user_requested — отмена по инициативе пользователя
             - failed_after_4_retries — отмена из-за 4 неудачных платежей
-        
+          enum:
+          - user_requested
+          - failed_after_4_retries
         cancellation_reason_text:
+          maxLength: 500
           type: string
           description: (Опционально) Текстовое описание причины отмены
-          maxLength: 500
-      
-      required:
-        - donor_email
-        - reason
-      
+      description: Запрос на отмену подписки
     CloudPaymentWebhook:
+      required:
+      - Amount
+      - Currency
+      - Email
+      - Status
+      - TransactionId
       type: object
-      description: Webhook успешного платежа от CloudPayments
       properties:
         TransactionId:
           type: string
           description: Идентификатор транзакции в CloudPayments
-        
         Amount:
           type: number
-          description: Сумма платежа (в рублях, не в копейках)
-        
+          description: "Сумма платежа (в рублях, не в копейках)"
         Currency:
           type: string
-          enum: ['RUB']
-        
+          enum:
+          - RUB
         Email:
           type: string
-          format: email
           description: Email платильщика
-        
+          format: email
         Status:
           type: string
-          enum: ['Completed']
           description: Статус платежа
-      
-      required:
-        - TransactionId
-        - Amount
-        - Currency
-        - Email
-        - Status
-
+          enum:
+          - Completed
+      description: Webhook успешного платежа от CloudPayments
     CloudPaymentFailWebhook:
       type: object
-      description: Webhook ошибки платежа от CloudPayments
       properties:
         TransactionId:
           type: string
-        
         Amount:
           type: number
-        
         Currency:
           type: string
-        
         Email:
           type: string
           format: email
-        
         Reason:
           type: string
           description: Причина отказа в платеже
-        
         Status:
           type: string
-          enum: ['Declined', 'Cancelled', 'AuthenticationFailed']
-
+          enum:
+          - Declined
+          - Cancelled
+          - AuthenticationFailed
+      description: Webhook ошибки платежа от CloudPayments
     CloudPaymentSubscriptionWebhook:
       type: object
-      description: Webhook ежемесячного списания по подписке
       properties:
         SubscriptionId:
           type: string
           description: ID подписки в CloudPayments
-        
         Amount:
           type: number
           description: Сумма платежа (в рублях)
-        
         Currency:
           type: string
-        
         Email:
           type: string
           format: email
-        
         Status:
           type: string
-          enum: ['Completed', 'Declined']
-        
+          enum:
+          - Completed
+          - Declined
         PaymentNumber:
           type: integer
-          description: Номер платежа по подписке (1, 2, 3...)
-        
+          description: "Номер платежа по подписке (1, 2, 3...)"
         CreatedDate:
           type: string
           description: Дата/время платежа
-
+      description: Webhook ежемесячного списания по подписке
     TemplateListItem:
       type: object
-      description: Элемент в списке шаблонов
       properties:
         template_id:
           type: string
-          example: 'ФТ-022'
-        
+          example: ФТ-022
         subject:
           type: string
           description: Тема письма
-        
         description:
           type: string
           description: Описание назначения шаблона
-        
         last_modified:
           type: string
           format: date-time
-        
         variables_count:
           type: integer
           description: Количество переменных для подстановки
-
+      description: Элемент в списке шаблонов
     TemplateUpdateRequest:
       type: object
-      description: Данные для обновления шаблона
       properties:
         subject:
           type: string
           description: Тема письма
-        
         body_html:
           type: string
-          format: html
           description: HTML-версия содержимого
-        
+          format: html
         body_text:
           type: string
           description: Текстовая версия содержимого
-        
         variables:
           type: array
           items:
-            type: object
-            properties:
-              name:
-                type: string
-              
-              description:
-                type: string
-              
-              required:
-                type: boolean
-
+            $ref: "#/components/schemas/TemplateUpdateRequest_variables"
+      description: Данные для обновления шаблона
     TemplateDetails:
       type: object
+      properties:
+        template_id:
+          type: string
+          example: FT-022
+        subject:
+          type: string
+          description: Тема письма
+          example: Добро пожаловать!
+        description:
+          type: string
+          description: Описание назначения и использования шаблона
+        body_html:
+          type: string
+          description: HTML-версия содержимого письма
+          format: html
+        body_text:
+          type: string
+          description: Текстовая версия содержимого письма (для клиентов без поддержки HTML)
+        variables:
+          type: array
+          description: "Массив переменных, используемых в шаблоне"
+          items:
+            $ref: "#/components/schemas/TemplateDetails_variables"
+        usage_count:
+          type: integer
+          description: "Количество раз, когда был использован шаблон"
+        last_used_at:
+          type: string
+          description: Дата последнего использования
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        updated_by:
+          type: string
+          description: "UUID администратора, который последний раз редактировал шаблон"
+          format: uuid
       description: |
         Полная информация о шаблоне письма.
-        
+
         **Содержит все параметры шаблона:**
         - Идентификаторы и метаинформация
         - HTML и текстовая версии содержимого
         - Список переменных для подстановки
         - Статистика использования
         - Даты создания и обновления
-      
-      properties:
-        template_id:
-          type: string
-          example: 'FT-022'
-        
-        subject:
-          type: string
-          description: Тема письма
-          example: 'Добро пожаловать!'
-        
-        description:
-          type: string
-          description: Описание назначения и использования шаблона
-        
-        body_html:
-          type: string
-          format: html
-          description: HTML-версия содержимого письма
-        
-        body_text:
-          type: string
-          description: Текстовая версия содержимого письма (для клиентов без поддержки HTML)
-        
-        variables:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-                description: Имя переменной (используется в шаблоне как {{name}})
-                example: 'user_name'
-              
-              description:
-                type: string
-                description: Описание переменной для администратора
-                example: 'Имя пользователя'
-              
-              required:
-                type: boolean
-                description: Обязательная ли переменная
-              
-              example_value:
-                type: string
-                description: Пример значения переменной
-          description: Массив переменных, используемых в шаблоне
-        
-        usage_count:
-          type: integer
-          description: Количество раз, когда был использован шаблон
-        
-        last_used_at:
-          type: string
-          format: date-time
-          description: Дата последнего использования
-        
-        created_at:
-          type: string
-          format: date-time
-        
-        updated_at:
-          type: string
-          format: date-time
-        
-        updated_by:
-          type: string
-          format: uuid
-          description: UUID администратора, который последний раз редактировал шаблон
-
     UnsendEmailItem:
       type: object
-      description: Элемент в списке неотправленных писем
       properties:
-        unsent_email_id:
+        unsend_email_id:
           type: string
           format: uuid
-        
         template_id:
           type: string
-        
         recipient_email:
           type: string
           format: email
-        
         failed_at:
           type: string
           format: date-time
-        
         error_message:
           type: string
           description: Сообщение об ошибке
-        
         retry_attempts:
           type: integer
           description: Количество выполненных повторных попыток
-        
         max_retries:
           type: integer
           description: Максимальное количество повторных попыток
-
+      description: Элемент в списке неотправленных писем
+    UnsendEmail:
+      type: object
+      properties:
+        unsend_email_id:
+          type: string
+          format: uuid
+        template_id:
+          type: string
+        recipient_email:
+          type: string
+          format: email
+        failed_at:
+          type: string
+          format: date-time
+        error_message:
+          type: string
+          description: Сообщение об ошибке
+        retry_attempts:
+          type: integer
+          description: Количество выполненных повторных попыток
+        max_retries:
+          type: integer
+          description: Максимальное количество повторных попыток
+      description: Элемент в списке неотправленных писем
     StatisticsSummaryResponse:
       type: object
-      description: Агрегированная статистика коммуникаций
       properties:
         period:
-          type: object
-          properties:
-            date_from:
-              type: string
-              format: date
-            
-            date_to:
-              type: string
-              format: date
-        
+          $ref: "#/components/schemas/StatisticsSummaryResponse_period"
         total_sent:
           type: integer
           description: Всего отправлено писем
-        
         total_delivered:
           type: integer
           description: Доставлено писем
-        
         total_opened:
           type: integer
           description: Открыто писем
-        
         total_clicked:
           type: integer
           description: Кликов по ссылкам
-        
         total_bounced:
           type: integer
           description: Вернулось писем (bounce)
-        
         metrics:
-          type: object
-          description: Расчетные метрики (OR, DR, CTR, CTOR)
-          properties:
-            delivery_rate:
-              type: number
-              format: float
-              description: 'Процент доставленных писем (DR = delivered / sent * 100)'
-            
-            open_rate:
-              type: number
-              format: float
-              description: 'Процент открытых писем (OR = opened / delivered * 100)'
-            
-            click_through_rate:
-              type: number
-              format: float
-              description: 'Процент кликов (CTR = clicked / sent * 100)'
-            
-            click_to_open_rate:
-              type: number
-              format: float
-              description: 'Процент кликов среди открывших (CTOR = clicked / opened * 100)'
-        
+          $ref: "#/components/schemas/StatisticsSummaryResponse_metrics"
         by_template:
           type: array
           items:
-            type: object
-            properties:
-              template_id:
-                type: string
-              
-              sent:
-                type: integer
-              
-              delivered:
-                type: integer
-              
-              opened:
-                type: integer
-
+            $ref: "#/components/schemas/StatisticsSummaryResponse_by_template"
+      description: Агрегированная статистика коммуникаций
     LogsResponse:
       type: object
-      description: Ответ с логами системы
       properties:
         total:
           type: integer
-        
         page:
           type: integer
-        
         limit:
           type: integer
-        
         logs:
           type: array
           items:
-            type: object
-            properties:
-              timestamp:
-                type: string
-                format: date-time
-              
-              level:
-                type: string
-                enum: [INFO, WARNING, ERROR, CRITICAL]
-              
-              component:
-                type: string
-              
-              message:
-                type: string
-              
-              request_id:
-                type: string
-                format: uuid
-              
-              user_id:
-                type: string
-                format: uuid
-              
-              ip_address:
-                type: string
-                format: ipv4
-
+            $ref: "#/components/schemas/LogsResponse_logs"
+      description: Ответ с логами системы
     ServicesStatusResponse:
       type: object
-      description: Статус интеграционных сервисов
       properties:
         services:
           type: array
           items:
-            type: object
-            properties:
-              service_name:
-                type: string
-                enum: [UnisenderGo, Unisender, CloudPayments, Bitrix]
-              
-              status:
-                type: string
-                enum: [healthy, degraded, unavailable]
-              
-              last_check_at:
-                type: string
-                format: date-time
-              
-              response_time_ms:
-                type: integer
-                description: Время ответа сервиса в миллисекундах
-              
-              error_message:
-                type: string
-                description: Сообщение об ошибке (если статус не healthy)
-
+            $ref: "#/components/schemas/ServicesStatusResponse_services"
+      description: Статус интеграционных сервисов
     QueuesStatusResponse:
       type: object
-      description: Статус внутренних очередей
       properties:
         queues:
           type: array
           items:
-            type: object
-            properties:
-              queue_name:
-                type: string
-                enum: [email_sending, webhook_processing, retry_queue, dead_letter_queue]
-              
-              pending_count:
-                type: integer
-                description: Количество задач в очереди
-              
-              processing_count:
-                type: integer
-                description: Количество задач в обработке
-              
-              oldest_task_age_seconds:
-                type: integer
-                description: Возраст старейшей задачи в секундах
-
+            $ref: "#/components/schemas/QueuesStatusResponse_queues"
+      description: Статус внутренних очередей
     AlertsResponse:
       type: object
-      description: Список активных алертов и предупреждений
       properties:
         total:
           type: integer
-        
         alerts:
           type: array
           items:
-            type: object
-            properties:
-              alert_id:
-                type: string
-                format: uuid
-              
-              severity:
-                type: string
-                enum: [low, medium, high, critical]
-              
-              title:
-                type: string
-                description: Краткое название алерта
-              
-              message:
-                type: string
-                description: Подробное описание алерта
-              
-              created_at:
-                type: string
-                format: date-time
-              
-              component:
-                type: string
-                description: Компонент системы, вызвавший алерт
-    
-    # ============================================
-    # Ошибки и валидация
-    # ============================================
-    
+            $ref: "#/components/schemas/AlertsResponse_alerts"
+      description: Список активных алертов и предупреждений
     ErrorResponse:
+      required:
+      - error_code
+      - error_message
+      - timestamp
       type: object
-      description: Стандартный ответ об ошибке
       properties:
         error_code:
           type: string
           description: Машиночитаемый код ошибки
-          example: 'INVALID_REQUEST'
-        
+          example: INVALID_REQUEST
         error_message:
           type: string
           description: Читаемое описание ошибки
-          example: 'Некорректные параметры запроса'
-        
+          example: Некорректные параметры запроса
         timestamp:
           type: string
-          format: date-time
           description: Timestamp ошибки (ISO 8601)
-          example: '2025-11-13T15:27:45.123Z'
-        
+          format: date-time
+          example: 2025-11-13T15:27:45.123Z
         request_id:
           type: string
-          format: uuid
           description: ID запроса для трассировки в логах
-      
-      required:
-        - error_code
-        - error_message
-        - timestamp
-
+          format: uuid
+      description: Стандартный ответ об ошибке
     ValidationErrorResponse:
       type: object
       description: Ответ при ошибке валидации данных
       allOf:
-        - $ref: '#/components/schemas/ErrorResponse'
-        - type: object
-          properties:
-            field:
-              type: string
-              description: Поле, в котором обнаружена ошибка
-            
-            value:
-              description: Некорректное значение
-            
-            validation_rule:
-              type: string
-              description: Описание правила валидации
-
+      - $ref: "#/components/schemas/ErrorResponse"
+      - type: object
+        properties:
+          field:
+            type: string
+            description: "Поле, в котором обнаружена ошибка"
+          value:
+            description: Некорректное значение
+          validation_rule:
+            type: string
+            description: Описание правила валидации
     RateLimitErrorResponse:
       type: object
       description: Ответ при превышении лимита запросов (429)
       allOf:
-        - $ref: '#/components/schemas/ErrorResponse'
-        - type: object
-          properties:
-            retry_after:
-              type: integer
-              description: Количество секунд до следующей попытки
-              example: 120
-            
-            rate_limit:
-              type: object
-              properties:
-                limit:
-                  type: integer
-                  description: Максимальное количество запросов в час
-                  example: 1000
-                
-                remaining:
-                  type: integer
-                  description: Оставшееся количество запросов
-                  example: 0
-                
-                reset_at:
-                  type: string
-                  format: date-time
-
+      - $ref: "#/components/schemas/ErrorResponse"
+      - type: object
+        properties:
+          retry_after:
+            type: integer
+            description: Количество секунд до следующей попытки
+            example: 120
+          rate_limit:
+            $ref: "#/components/schemas/RateLimitErrorResponse_rate_limit"
     ServerErrorResponse:
       type: object
       description: Ответ при ошибке сервера (5xx)
       allOf:
-        - $ref: '#/components/schemas/ErrorResponse'
-        - type: object
-          properties:
-            retry_info:
-              type: object
-              properties:
-                max_retries:
-                  type: integer
-                  example: 3
-                
-                current_retry:
-                  type: integer
-                  example: 0
-                
-                next_retry_at:
-                  type: string
-                  format: date-time
-
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: |
-        JWT токен для аутентификации.
-
-        Получить можно через эндпоинт `/auth/login` (планируется разработать в ходе дальнейших работ по Платформе).
-        
-        ```python
-        Authorization: Bearer <JWT_token>
-        ```
-        
+      - $ref: "#/components/schemas/ErrorResponse"
+      - type: object
+        properties:
+          retry_info:
+            $ref: "#/components/schemas/ServerErrorResponse_retry_info"
+    inline_response_200:
+      required:
+      - email_id
+      - sent_at
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+          description: |
+            Статус отправки:
+            - `sent` — письмо немедленно отправлено
+            - `queued` — письмо помещено в очередь (при высокой нагрузке)
+          enum:
+          - sent
+          - queued
+        email_id:
+          type: string
+          description: Уникальный идентификатор письма в системе интеграции
+          format: uuid
+        message_id:
+          type: string
+          description: Идентификатор письма во внешней системе (UnisenderGo/Unisender)
+        sent_at:
+          type: string
+          description: Timestamp отправки (ISO 8601)
+          format: date-time
+        retry_count:
+          maximum: 3
+          minimum: 0
+          type: integer
+          description: Количество повторных попыток (0 если отправлено с первой попытки)
+    inline_response_200_1:
+      required:
+      - status
+      - subscriber_id
+      type: object
+      properties:
+        status:
+          type: string
+          description: |
+            Статус добавления:
+            - `added` — email успешно добавлен
+            - `already_exists` — email уже был в списке
+          enum:
+          - added
+          - already_exists
+        subscriber_id:
+          type: string
+          description: Уникальный ID подписчика в системе
+          format: uuid
+        unisender_id:
+          type: string
+          description: ID подписчика в системе Unisender
+        email:
+          type: string
+          description: Email адрес (частично скрыт для безопасности)
+          format: email
+    inline_response_200_2:
+      type: object
+      properties:
+        status:
+          type: string
+          example: received
+    inline_response_200_3:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Общее количество Событий по фильтру
+        page:
+          type: integer
+        limit:
+          type: integer
+        total_pages:
+          type: integer
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventListItem"
+    inline_response_200_4:
+      type: object
+      properties:
+        status:
+          type: string
+          example: approved
+        event_id:
+          type: string
+          format: uuid
+        new_status:
+          type: string
+          example: published
+        approved_at:
+          type: string
+          format: date-time
+        approved_by:
+          type: string
+          description: ID администратора
+          format: uuid
+        notification_sent:
+          type: boolean
+          description: Отправлено ли письмо создателю
+        email_id:
+          type: string
+          description: ID отправленного письма
+          format: uuid
+    inline_response_200_5:
+      type: object
+      properties:
+        status:
+          type: string
+          example: rejected
+        event_id:
+          type: string
+          format: uuid
+        new_status:
+          type: string
+          example: rejected
+        rejected_at:
+          type: string
+          format: date-time
+        rejected_by:
+          type: string
+          format: uuid
+        rejection_reason:
+          type: string
+        notification_sent:
+          type: boolean
+        email_id:
+          type: string
+          format: uuid
+    inline_response_200_6:
+      type: object
+      properties:
+        status:
+          type: string
+          description: |
+            Статус платежа:
+            - `initiated` — платеж инициирован
+            - `pending_3ds` — требуется 3D-Secure
+          enum:
+          - initiated
+          - pending_3ds
+        payment_id:
+          type: string
+          description: Внутренний ID платежа
+        transaction_id:
+          type: string
+          description: ID транзакции в CloudPayments
+        payment_url:
+          type: string
+          description: URL для завершения платежа (если требуется 3D-Secure)
+          format: uri
+        amount:
+          type: number
+          format: float
+        currency:
+          type: string
+        is_first_donation:
+          type: boolean
+          description: Первое ли это пожертвование от данного благотворителя
+        requires_additional_verification:
+          type: boolean
+          description: Требуется ли дополнительная проверка
+    inline_response_200_7:
+      type: object
+      properties:
+        status:
+          type: string
+          example: active
+        subscription_id:
+          type: string
+          description: Внутренний ID подписки
+        cloudpayments_subscription_id:
+          type: string
+          description: ID подписки в CloudPayments
+        amount:
+          type: number
+          description: "Сумма платежа в рублях (для хранения, не в копейках)"
+          format: float
+        frequency:
+          type: string
+          description: Периодичность списаний
+          enum:
+          - monthly
+          - quarterly
+          - annually
+        next_charge_date:
+          type: string
+          description: Дата следующего списания
+          format: date
+        notification_sent:
+          type: boolean
+          description: Отправлено ли письмо (ФТ-009)
+        email_id:
+          type: string
+          format: uuid
+        manage_url:
+          type: string
+          description: URL для управления подпиской
+          format: uri
+    inline_response_200_8:
+      type: object
+      properties:
+        status:
+          type: string
+          example: cancelled
+        subscription_id:
+          type: string
+        cancelled_at:
+          type: string
+          format: date-time
+        notification_sent:
+          type: boolean
+        email_id:
+          type: string
+          format: uuid
+        last_charge_date:
+          type: string
+          description: Дата последнего успешного списания
+          format: date
+        total_donations:
+          type: number
+          description: Общая сумма пожертвований по подписке
+          format: float
+        donations_count:
+          type: integer
+          description: Количество успешных списаний
+    inline_response_200_9:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Код успеха (CloudPayments требует code=0)
+          example: 0
+    inline_response_200_10:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 0
+    inline_response_200_11:
+      type: object
+      properties:
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+        templates:
+          type: array
+          items:
+            $ref: "#/components/schemas/TemplateListItem"
+    inline_response_200_12:
+      type: object
+      properties:
+        status:
+          type: string
+          example: updated
+        template_id:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+        updated_by:
+          type: string
+          format: uuid
+    inline_response_200_13:
+      type: object
+      properties:
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+        unsend_emails:
+          type: array
+          items:
+            $ref: "#/components/schemas/UnsendEmailItem"
+    retry_send_body:
+      required:
+      - unsend_email_id
+      type: object
+      properties:
+        unsend_email_id:
+          type: string
+          description: Идентификатор неотправленного письма для переотправки (UUID4).
+          format: uuid
+          example: 7496ba97-6ad8-4c0b-8330-c441635d6e0a
+    inline_response_200_14:
+      type: object
+      properties:
+        status:
+          type: string
+          example: retry_initiated
+        successful:
+          type: boolean
+    TemplateUpdateRequest_variables:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        required:
+          type: boolean
+    TemplateDetails_variables:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Имя переменной (используется в шаблоне как {{name}})"
+          example: user_name
+        description:
+          type: string
+          description: Описание переменной для администратора
+          example: Имя пользователя
+        required:
+          type: boolean
+          description: Обязательная ли переменная
+        example_value:
+          type: string
+          description: Пример значения переменной
+    StatisticsSummaryResponse_period:
+      type: object
+      properties:
+        date_from:
+          type: string
+          format: date
+        date_to:
+          type: string
+          format: date
+    StatisticsSummaryResponse_metrics:
+      type: object
+      properties:
+        delivery_rate:
+          type: number
+          description: Процент доставленных писем (DR = delivered / sent * 100)
+          format: float
+        open_rate:
+          type: number
+          description: Процент открытых писем (OR = opened / delivered * 100)
+          format: float
+        click_through_rate:
+          type: number
+          description: Процент кликов (CTR = clicked / sent * 100)
+          format: float
+        click_to_open_rate:
+          type: number
+          description: Процент кликов среди открывших (CTOR = clicked / opened * 100)
+          format: float
+      description: "Расчетные метрики (OR, DR, CTR, CTOR)"
+    StatisticsSummaryResponse_by_template:
+      type: object
+      properties:
+        template_id:
+          type: string
+        sent:
+          type: integer
+        delivered:
+          type: integer
+        opened:
+          type: integer
+    LogsResponse_logs:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        level:
+          type: string
+          enum:
+          - INFO
+          - WARNING
+          - ERROR
+          - CRITICAL
+        component:
+          type: string
+        message:
+          type: string
+        request_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        ip_address:
+          type: string
+          format: ipv4
+    ServicesStatusResponse_services:
+      type: object
+      properties:
+        service_name:
+          type: string
+          enum:
+          - UnisenderGo
+          - Unisender
+          - CloudPayments
+          - Bitrix
+        status:
+          type: string
+          enum:
+          - healthy
+          - degraded
+          - unavailable
+        last_check_at:
+          type: string
+          format: date-time
+        response_time_ms:
+          type: integer
+          description: Время ответа сервиса в миллисекундах
+        error_message:
+          type: string
+          description: Сообщение об ошибке (если статус не healthy)
+    QueuesStatusResponse_queues:
+      type: object
+      properties:
+        queue_name:
+          type: string
+          enum:
+          - email_sending
+          - webhook_processing
+          - retry_queue
+          - dead_letter_queue
+        pending_count:
+          type: integer
+          description: Количество задач в очереди
+        processing_count:
+          type: integer
+          description: Количество задач в обработке
+        oldest_task_age_seconds:
+          type: integer
+          description: Возраст старейшей задачи в секундах
+    AlertsResponse_alerts:
+      type: object
+      properties:
+        alert_id:
+          type: string
+          format: uuid
+        severity:
+          type: string
+          enum:
+          - low
+          - medium
+          - high
+          - critical
+        title:
+          type: string
+          description: Краткое название алерта
+        message:
+          type: string
+          description: Подробное описание алерта
+        created_at:
+          type: string
+          format: date-time
+        component:
+          type: string
+          description: "Компонент системы, вызвавший алерт"
+    RateLimitErrorResponse_rate_limit:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Максимальное количество запросов в час
+          example: 1000
+        remaining:
+          type: integer
+          description: Оставшееся количество запросов
+          example: 0
+        reset_at:
+          type: string
+          format: date-time
+    ServerErrorResponse_retry_info:
+      type: object
+      properties:
+        max_retries:
+          type: integer
+          example: 3
+        current_retry:
+          type: integer
+          example: 0
+        next_retry_at:
+          type: string
+          format: date-time
   examples:
     IdempotentRequestExample:
       summary: Пример запроса с идемпотентным ключом
@@ -2626,6 +2447,16 @@ components:
           event_id: e995f12b-abcd-4c2d-b174-bd622174807f
           agree_newsletter: true
           currency: RUB
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: |
+        JWT токен для аутентификации.
 
-security:
-  - bearerAuth: []
+        Получить можно через эндпоинт `/auth/login` (планируется разработать в ходе дальнейших работ по Платформе).
+
+        ```python
+        Authorization: Bearer <JWT_token>
+        ```
+      scheme: bearer
+      bearerFormat: JWT
