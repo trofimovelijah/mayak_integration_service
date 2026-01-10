@@ -7,7 +7,6 @@ info:
     ### Важные замечания
     - Все эндпоинты требуют аутентификацию через заголовок `Authorization: Bearer <token>`
     - Для всех операций записи (POST, PUT, DELETE) требуется заголовок `Idempotency-Key` с уникальным UUID
-    - Повторные запросы с тем же Idempotency-Key вернут результат первоначального запроса без повторного выполнения операции
     - Для обработки ошибок 429 используйте заголовок `X-RateLimit-Reset`, указывающий время до сброса лимита
   termsOfService: https://join.mayak.help/assets/Politika_obespecheniya_bezopasnosti_PD_k_prikazu_74_ot_29_11_24.pdf
   contact:
@@ -21,21 +20,21 @@ servers:
 security:
 - bearerAuth: []
 tags:
-- name: Почтовые уведомления и рассылки
+- name: EmailNotifications
   description: "Операции, связанные с отправкой писем, массовых рассылок, уведомлений, webhooks Unisender и UnisenderGo."
-- name: События и модерация
+- name: EventsModeration
   description: "Создание, модерация, статусы и получение событий платформы."
-- name: Платёжные операции и подписки
+- name: PaymentsSubscriptions
   description: "Пожертвования, рекуррентные платежи, webhooks CloudPayments, операции с подписками."
-- name: Администрирование
+- name: Administration
   description: Операции с шаблонами писем со стороны Администратора
-- name: Статистика и мониторинг
+- name: StatisticsMonitoring
   description: "Операции с логами, мониторингом и статистикой."
 paths:
   /email/send:
     post:
       tags:
-      - Почтовые уведомления и рассылки
+      - EmailNotifications
       summary: Отправка письма (уведомления)
       description: |
         Отправка письма по различным бизнес-сценариям. Используйте различные наборы параметров в зависимости от типа письма.
@@ -127,7 +126,7 @@ paths:
   /email/subscribers:
     post:
       tags:
-      - Почтовые уведомления и рассылки
+      - EmailNotifications
       summary: Добавление email в лист рассылки Unisender
       description: "Добавление email пользователя в список рассылки \nдля дальнейших действий по усмотрению Платформы.\n"
       operationId: addSubscriber
@@ -175,27 +174,18 @@ paths:
   /webhooks/unisendergo/delivery:
     post:
       tags:
-      - Почтовые уведомления и рассылки
+      - EmailNotifications
       summary: Webhook статуса доставки от UnisenderGo
       description: |
         Обработка webhook уведомлений от UnisenderGo о статусе доставки писем.
 
         **Возможные события:**
-        - `delivered` — письмо доставлено
-        - `opened` — письмо открыто
-        - `clicked` — клик по ссылке в письме
-        - `bounced` — письмо вернулось (hard/soft bounce)
-        - `unsubscribed` — отписка от рассылки
-
-        **Безопасность:** Webhook подписан HMAC SHA-256 в заголовке `X-Unisender-Signature`
+        - delivered — письмо доставлено
+        - opened — письмо открыто
+        - clicked — клик по ссылке в письме
+        - bounced — письмо вернулось (hard/soft bounce)
+        - unsubscribed — отписка от рассылки
       operationId: unisendergoDeliveryWebhook
-      parameters:
-      - name: X-Unisender-Signature
-        in: header
-        description: HMAC SHA-256 подпись тела запроса
-        required: true
-        schema:
-          type: string
       requestBody:
         content:
           application/json:
@@ -218,7 +208,7 @@ paths:
   /events:
     get:
       tags:
-      - События и модерация
+      - EventsModeration
       summary: Получение списка Событий
       description: |
         Возвращает список Событий с возможностью фильтрации по статусу.
@@ -298,7 +288,7 @@ paths:
   /events/{event_id}:
     get:
       tags:
-      - События и модерация
+      - EventsModeration
       summary: Получение деталей События
       description: |
         Возвращает полную информацию о События для принятия решения по модерации.
@@ -348,7 +338,7 @@ paths:
   /events/{event_id}/approve:
     post:
       tags:
-      - События и модерация
+      - EventsModeration
       summary: Одобрение События
       description: |
         Одобряет событие по итогам модерации Администратором и переводит его в статус "published".
@@ -417,7 +407,7 @@ paths:
   /events/{event_id}/reject:
     post:
       tags:
-      - События и модерация
+      - EventsModeration
       summary: Отклонение События
       description: |
         Отклоняет событие по итогам модерации Администратором и переводит его в статус "rejected".
@@ -487,7 +477,7 @@ paths:
   /payments:
     post:
       tags:
-      - Платёжные операции и подписки
+      - PaymentsSubscriptions
       summary: Инициирование платежа
       description: |
         Инициирует разовый платеж (пожертвование) через платежную систему CloudPayments.
@@ -543,7 +533,7 @@ paths:
   /subscriptions:
     post:
       tags:
-      - Платёжные операции и подписки
+      - PaymentsSubscriptions
       summary: Создание подписки на рекуррентные платежи
       description: |
         Создает подписку на регулярные (рекуррентные) пожертвования.
@@ -601,10 +591,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServerErrorResponse"
-  /subscriptions/{subscription_id}/cancel:
+  /subscriptions/{subscription_id}:
     delete:
       tags:
-      - Платёжные операции и подписки
+      - PaymentsSubscriptions
       summary: Отмена подписки на рекуррентные платежи
       description: |
         Отмена подписки на рекуррентные платежи по инициативе Благотворителя.
@@ -666,7 +656,7 @@ paths:
   /webhooks/cloudpayments/pay:
     post:
       tags:
-      - Платёжные операции и подписки
+      - PaymentsSubscriptions
       summary: Webhook успешного платежа от CloudPayments
       description: |
         Обработка webhook уведомления о успешном платеже от CloudPayments.
@@ -695,7 +685,7 @@ paths:
   /webhooks/cloudpayments/fail:
     post:
       tags:
-      - Платёжные операции и подписки
+      - PaymentsSubscriptions
       summary: Webhook неудачного платежа от CloudPayments
       description: |
         Обработка webhook уведомления об ошибке платежа от CloudPayments.
@@ -723,7 +713,7 @@ paths:
   /webhooks/cloudpayments/subscription:
     post:
       tags:
-      - Платёжные операции и подписки
+      - PaymentsSubscriptions
       summary: Webhook ежемесячного списания по подписке
       description: |
         Обработка webhook от CloudPayments о регулярном списании по подписке.
@@ -750,7 +740,7 @@ paths:
   /templates:
     get:
       tags:
-      - Администрирование
+      - Administration
       summary: Получение списка шаблонов писем
       description: Возвращает список всех шаблонов писем для редактирования в админ-панели
       operationId: getTemplatesList
@@ -782,7 +772,7 @@ paths:
   /templates/{template_id}:
     get:
       tags:
-      - Администрирование
+      - Administration
       summary: Получение деталей шаблона письма
       description: |
         Возвращает полную информацию о шаблоне письма для редактирования.
@@ -817,7 +807,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
     put:
       tags:
-      - Администрирование
+      - Administration
       summary: Обновление шаблона письма
       description: |
         Обновление содержимого и параметров шаблона письма.
@@ -862,7 +852,7 @@ paths:
   /retry/list:
     get:
       tags:
-      - Администрирование
+      - Administration
       summary: Список неотправленных писем
       description: |
         Возвращает список писем, которые не были отправлены из-за ошибок.
@@ -910,7 +900,7 @@ paths:
   /retry/send:
     post:
       tags:
-      - Администрирование
+      - Administration
       summary: Переотправка неудачно отправленного письма
       description: |
         Ручная переотправка конкретного неудачно отправленного письма по идентификатору.
@@ -936,7 +926,7 @@ paths:
   /statistics/summary:
     get:
       tags:
-      - Статистика и мониторинг
+      - StatisticsMonitoring
       summary: Просмотр статистики коммуникаций
       description: |
         Возвращает агрегированную статистику по email коммуникациям.
@@ -984,12 +974,10 @@ paths:
   /statistics/export/csv:
     get:
       tags:
-      - Статистика и мониторинг
+      - StatisticsMonitoring
       summary: Экспорт статистики в CSV
       description: |
-        Экспортирует статистику в CSV файл для анализа.
-
-        **Используется в:** ФТ-017 (формирование отчётов)
+        Экспортирует статистику в CSV файл для анализа
       operationId: exportStatisticsCSV
       parameters:
       - name: date_from
@@ -1027,7 +1015,7 @@ paths:
   /logs:
     get:
       tags:
-      - Статистика и мониторинг
+      - StatisticsMonitoring
       summary: Просмотр логов системы
       description: |
         Просмотр системных логов с фильтрацией.
@@ -1099,7 +1087,7 @@ paths:
   /logs/export/csv:
     get:
       tags:
-      - Статистика и мониторинг
+      - StatisticsMonitoring
       summary: Экспорт логов в CSV
       description: Экспорт системных логов в CSV файл
       operationId: exportLogsCSV
@@ -1144,10 +1132,10 @@ paths:
   /monitoring/services:
     get:
       tags:
-      - Статистика и мониторинг
+      - StatisticsMonitoring
       summary: Получение статуса сервисов и подсистем
       description: |
-        Возвращает текущий статус всех интеграционных сервисов.
+        Возвращает текущий статус всех сервисов, входящих в Платформу
       operationId: getServicesStatus
       parameters:
       - name: service_name
@@ -1166,7 +1154,7 @@ paths:
   /monitoring/queues:
     get:
       tags:
-      - Статистика и мониторинг
+      - StatisticsMonitoring
       summary: Получение статуса очередей
       description: Возвращает статус внутренних очередей сообщений
       operationId: getQueuesStatus
@@ -1180,7 +1168,7 @@ paths:
   /monitoring/alerts:
     get:
       tags:
-      - Статистика и мониторинг
+      - StatisticsMonitoring
       summary: Получение активных алертов
       description: Возвращает список активных алертов и предупреждений
       operationId: getActiveAlerts
@@ -1331,10 +1319,6 @@ components:
         user_agent:
           type: string
           description: User-Agent браузера/почтового клиента
-        ip_address:
-          type: string
-          description: IP адрес получателя
-          format: ipv4
       description: |
         Webhook событие от UnisenderGo о статусе доставки писем.
 
