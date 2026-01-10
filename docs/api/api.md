@@ -1,33 +1,33 @@
 ## 7.1 Диаграмма последовательностей
 
 Для удобства чтения, как и в случае с моделями процессов, диаграмма последовательностей была разбита на 3 частей. Диаграмма последовательности при работе с Событиями представлена ниже. Как видно, в ней задействованы все три пользовательские роли, а из внешних сервисов только сервисы рассылки.   
-![][image26]  
-![][image27]
+![](/images/diagrams/SequenceDiagram/sequenceDiagramAll/Events-page1.png) 
+![](/images/diagrams/SequenceDiagram/sequenceDiagramAll/Events-page2.png) 
 
 В случае с Платежами задействована только роль Благотворителя (исходим из того, что Пользователь Платформы также может быть Благотворителем, поэтому его выделение на диаграмме избыточно).  
-![][image28]
+![](/images/diagrams/SequenceDiagram/sequenceDiagramDonat/Donation.png)
 
 В случае с Рекуррентными платежами расписаны последовательности при работе оформлением подписки, списаниями (в данном случае рассматриваются ежемесячные платежи) и отменой подписки вручную.  
-![][image29]
+![](/images/diagrams/SequenceDiagram/sequenceDiagramRPayment/Recurrent.png)
 
 ## 7.2 Список интеграций
 
-Полностью спецификация представлена в [https://app.swaggerhub.com/apis-docs/aosu/mayak\_integration/1.0.0](https://app.swaggerhub.com/apis-docs/aosu/mayak_integration/1.0.0). При необходимости можно скачать yaml спецификации по [ссылке](https://drive.google.com/file/d/1WcRNtpkMWdwTtgGGXLtOoc3k0FAvZ4SF/view?usp=sharing).   
+Полностью спецификация представлена в [https://app.swaggerhub.com/apis-docs/aosu/mayak\_integration/1.0.0](https://app.swaggerhub.com/apis-docs/aosu/mayak_integration/1.0.0). При необходимости можно скачать [yaml спецификацию](/docs/api/openapi.yaml).   
 Список интеграций представлен в таблице. Для дальнейшего использования (разработка, отладка и тестирование) достаточно применение спецификации, представленной по ссылке выше.   
 Легенда интеграций по цветовой гамме представлена следующим образом:
 
-* Битрикс \- интеграции от Битрикса в Сервис интеграции \- в спецификации не представлены  
-* Битрикс \- триггеры от Битрикса \- в спецификации не представлены  
-* POST /email/subscribers \- встречаются в диаграммах последовательности не единожды и относятся к интеграциям с Unisender  
-* POST /email/send \- многократно встречается API \- основной метод Сервиса интеграции  
-* POST /payments \- интеграции с Платёжными сервисами от Сервиса интеграции  
-* Webhook \- вебхуки к Сервису интеграции \- в спецификации представлены, но потребуется их дальнейший пересмотр
+* <span style="color: brown;">Битрикс</span> \- интеграции от Битрикса в Сервис интеграции \- в спецификации не представлены  
+* <span style="color: pink;">Битрикс</span> \- триггеры от Битрикса \- в спецификации не представлены  
+* <span style="color: lightblue;">POST /email/subscribers</span> \- встречаются в диаграммах последовательности не единожды и относятся к интеграциям с Unisender  
+* <span style="color: lightgreen;">POST /email/send</span> \- многократно встречается API \- основной метод Сервиса интеграции  
+* <span style="color: yellow;">POST /payments</span> \- интеграции с Платёжными сервисами от Сервиса интеграции  
+* <span style="color: pink;">Webhook</span> \- вебхуки к Сервису интеграции \- в спецификации представлены, но потребуется их дальнейший пересмотр
 
 | Требование | Действие | От кого | Соединение | Куда | Применяемые параметры | Ссылка на документацию |
 | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
-| ФТ-022 | Регистрация пользователя и отправка письма благодарности | Битрикс | POST /emails/send | Сервис интеграции | user\_email \- адрес электронной почты регистрируемого Пользователя, user\_name \- имя Пользователя, agree\_newsletter \- флаг согласия на рассылку, registration\_date \- дата регистрации |  |
-| ФТ-022 | Добавление email в рассылку (если согласие получено) | Сервис интеграции | POST /email/subscribers | Unisender | user\_email \- адрес для подписки, list\_id \- идентификатор списка рассылки, source \- источник: 'registration', timestamp \- время подписки | [https://app.swaggerhub.com/apis/aosu/mayak\_integration/1.0.0\#/EmailNotifications/addSubscriber](https://app.swaggerhub.com/apis/aosu/mayak_integration/1.0.0#/EmailNotifications/addSubscriber)  |
-| ФТ-022 | Отправка письма благодарности за регистрацию | Сервис интеграции | POST /email/send | UnisenderGo | template\_id \- идентификатор шаблона письма, recipient\_email \- адрес получателя письма, vars={user\_name} \- имя Пользователя для подстановки в письмо | [https://app.swaggerhub.com/apis/aosu/mayak\_integration/1.0.0\#/EmailNotifications/sendEmailUniversal](https://app.swaggerhub.com/apis/aosu/mayak_integration/1.0.0#/EmailNotifications/sendEmailUniversal)  |
+| <span style="color: brown;">ФТ-022 | Регистрация пользователя и отправка письма благодарности | Битрикс | POST /emails/send | Сервис интеграции | user\_email \- адрес электронной почты регистрируемого Пользователя, user\_name \- имя Пользователя, agree\_newsletter \- флаг согласия на рассылку, registration\_date \- дата регистрации |  |
+| <span style="color: lightblue;">ФТ-022 | Добавление email в рассылку (если согласие получено) | Сервис интеграции | POST /email/subscribers | Unisender | user\_email \- адрес для подписки, list\_id \- идентификатор списка рассылки, source \- источник: 'registration', timestamp \- время подписки | [https://app.swaggerhub.com/apis/aosu/mayak\_integration/1.0.0\#/EmailNotifications/addSubscriber](https://app.swaggerhub.com/apis/aosu/mayak_integration/1.0.0#/EmailNotifications/addSubscriber)  |
+| <span style="color: lightgreen;">ФТ-022 | Отправка письма благодарности за регистрацию | Сервис интеграции | POST /email/send | UnisenderGo | template\_id \- идентификатор шаблона письма, recipient\_email \- адрес получателя письма, vars={user\_name} \- имя Пользователя для подстановки в письмо | [https://app.swaggerhub.com/apis/aosu/mayak\_integration/1.0.0\#/EmailNotifications/sendEmailUniversal](https://app.swaggerhub.com/apis/aosu/mayak_integration/1.0.0#/EmailNotifications/sendEmailUniversal)  |
 | ФТ-022 | Статус доставки письма | UnisenderGo | Webhook | Сервис интеграции | email\_id \- идентификатор письма message\_id \- идентификатор сообщения recipient\_email \- email отправителя template\_id \- идентификатор шаблона письма delivered\_at \- время доставки opened\_at \- время открытия | [https://app.swaggerhub.com/apis/aosu/mayak\_integration/1.0.0\#/EmailNotifications/unisendergoDeliveryWebhook](https://app.swaggerhub.com/apis/aosu/mayak_integration/1.0.0#/EmailNotifications/unisendergoDeliveryWebhook)  |
 | ФТ-021 | Напоминание создать Событие через 7 дней | Битрикс | POST /emails/send | Сервис интеграции | user\_id \- уникальный идентификатор Пользователя, user\_email \- адрес Пользователя, registration\_date \- дата регистрации для расчета 7-дневного периода, event\_exists \- было ли создано Событие? |  |
 | ФТ-021 | Отправка письма с предложением создать Событие | Сервис интеграции | POST /email/send | UnisenderGo | template\_id \- идентификатор шаблона, recipient\_email \- адрес получателя, vars={user\_name} \- имя Пользователя | [https://app.swaggerhub.com/apis/aosu/mayak\_integration/1.0.0\#/EmailNotifications/sendEmailUniversal](https://app.swaggerhub.com/apis/aosu/mayak_integration/1.0.0#/EmailNotifications/sendEmailUniversal)  |

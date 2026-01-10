@@ -1,9 +1,8 @@
 # 8 Требования к данным интеграции
 
 ## 8.1 Физическая модель
-
-![][image30]  
-Более детально ER-модель можно посмотреть [по ссылке](https://drive.google.com/file/d/1Mzn-HZvzWzUJg0jTC6xyWdv03h2slfoE/view?usp=sharing).
+Оригинал модели представлен в [файле](/docs/technical-design/database/ER-model.drawio)
+![](/images/diagrams/database/ER-model.drawio.png)
 
 ## 8.2 Словарь данных
 
