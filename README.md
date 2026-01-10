@@ -5,12 +5,12 @@
 
 Полная документация в порядке чтения размещена в директории [`docs/`](./docs/):
 
-- **[Спецификация требований](./docs/specifications/srs/SRS.md)**
-- **[Системный дизайн](./docs/specifications/system%20design/README.md)**
-- **[Моделирование бизнес-процессов Платформы](./docs/technical-design/bpmn/README.md)**
-- **[Визуализация реализации требований](/docs/technical-design/ui/README.md)**
-- **[Анализ API](./docs/api/README.md)**
-- **[Требования к данным интеграции](/docs/technical-design/database/README.md)**
+- **[Спецификация требований](./docs/01_specifications/SRS.md)**
+- **[Системный дизайн](./docs/02_system_design/README.md)**
+- **[Моделирование бизнес-процессов Платформы](./docs/03_bpmn/README.md)**
+- **[Визуализация реализации требований](/docs/04_ui/README.md)**
+- **[Анализ API](./docs/05_api/README.md)**
+- **[Требования к данным интеграции](/docs/06_database/README.md)**
 
 ## Структура
 

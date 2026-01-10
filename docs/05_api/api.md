@@ -12,7 +12,7 @@
 
 ## 7.2 Список интеграций
 
-Полностью спецификация представлена в [https://app.swaggerhub.com/apis-docs/aosu/mayak\_integration/1.0.0](https://app.swaggerhub.com/apis-docs/aosu/mayak_integration/1.0.0). При необходимости можно скачать [yaml спецификацию](/docs/api/openapi.yaml).   
+Полностью спецификация представлена в [https://app.swaggerhub.com/apis-docs/aosu/mayak\_integration/1.0.0](https://app.swaggerhub.com/apis-docs/aosu/mayak_integration/1.0.0). При необходимости можно скачать [yaml спецификацию](openapi.yaml).   
 Список интеграций представлен в таблице. Для дальнейшего использования (разработка, отладка и тестирование) достаточно применение спецификации, представленной по ссылке выше.   
 Легенда интеграций по цветовой гамме представлена следующим образом:
 

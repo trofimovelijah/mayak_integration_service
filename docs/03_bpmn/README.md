@@ -10,14 +10,14 @@
 Более наглядно диаграмму можно рассмотреть по [ссылке](https://drive.google.com/file/d/1ZkotsOhDbqnyw8x1iU3gu7Hv-dtKuLm6/view?usp=sharing). 
 
 **Диаграмма to be**  
-Исходник процесса в нотации **bpmn** размещён по [ссылке](/docs/technical-design/bpmn/as%20is/as%20is:%20creating%20and%20publishing%20an%20event.bpmn). В рамках процесса работы с жизненным циклом События покрываются следующие требования: 
+Исходник процесса в нотации **bpmn** размещён по [ссылке](/docs/03_bpmn/to%20be/to%20be:events.bpmn). В рамках процесса работы с жизненным циклом События покрываются следующие требования: 
 
 * ФТ-001 \- ФТ-004  
 * ФТ-006  
 * ФТ-009  
 * ФТ-020 \- ФТ-027
 
-![](/docs/technical-design/bpmn/to%20be/to%20be:events.svg) 
+![](/docs/03_bpmn/to%20be/to%20be:events.svg) 
 В процессе задействованы логически обособленные функции, которые для удобства чтения и реализации разбиты на отдельные подпроцессы. Как следует из диаграммы **to be** наличествуют пять подпроцессов:
 
 * выполнение регистрации на Платформе,  
@@ -48,8 +48,8 @@
 ![](/images/diagrams/bpmn/as%20is:%20donation%20and%20gratitude.png)
 
 **Диаграмма to be**  
-Исходник процесса в нотации bpmn размещён по [ссылке](/docs/technical-design/bpmn/to%20be/to%20be:donation.bpmn).  
-![](/docs/technical-design/bpmn/to%20be/to%20be:donation.svg)
+Исходник процесса в нотации bpmn размещён по [ссылке](/docs/03_bpmn/to%20be/to%20be:donation.bpmn).  
+![](/docs/03_bpmn/to%20be/to%20be:donation.svg)
 Как следует из диаграммы **to be** наличествуют три подпроцесса:
 
 * валидация и подготовка данных,  

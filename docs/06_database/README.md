@@ -1,7 +1,7 @@
 # 8 Требования к данным интеграции
 
 ## 8.1 Физическая модель
-Оригинал модели представлен в [файле](/docs/technical-design/database/ER-model.drawio)
+Оригинал модели представлен в [файле](/docs/06_database/ER-model.drawio)
 ![](/images/diagrams/database/ER-model.drawio.png)
 
 ## 8.2 Словарь данных

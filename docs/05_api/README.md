@@ -6,9 +6,9 @@
     1. Откройте [https://editor.swagger.io/](https://editor.swagger.io/)
     2. File → Import File → укажите файл *openapi.yaml*
 
-1. Пояснение проектирования API представлено в [api.md](./api.md).
+2. Пояснение проектирования API представлено в [api.md](./api.md).
 
-1. Диаграммы последовательности представлены в [api_flow](./api_flow/)
+3. Диаграммы последовательности представлены в [api_flow](./api_flow/)
 
     **Просмотр:**
     1. Откройте https://www.plantuml.com/plantuml/uml/

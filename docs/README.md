@@ -2,12 +2,12 @@
 
 ## Быстрый доступ
 
-- **[Спецификация требований](./specifications/srs/SRS.md)**
-- **[Системный дизайн](./specifications/system%20design/README.md)**
-- **[Моделирование бизнес-процессов Платформы](./technical-design/bpmn/README.md)**
-- **[Визуализация реализации требований](./technical-design/ui/README.md)**
-- **[Анализ API](./api/README.md)**
-- **[Требования к данным интеграции](./technical-design/database/README.md)**
+- **[Спецификация требований](./01_specifications/SRS.md)**
+- **[Системный дизайн](./02_system_design/README.md)**
+- **[Моделирование бизнес-процессов Платформы](./03_bpmn/README.md)**
+- **[Визуализация реализации требований](./04_ui/README.md)**
+- **[Анализ API](./05_api/README.md)**
+- **[Требования к данным интеграции](./06_database/README.md)**
 
 ## Структура
 
