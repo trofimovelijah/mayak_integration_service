@@ -11,6 +11,7 @@ on:
       - '3_business_requirements.md'
       - '4_functional_requirements.md'
       - '5_non-functional_requirements.md'
+  workflow_dispatch: 
 
 permissions:
   contents: write
