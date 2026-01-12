@@ -1,0 +1,54 @@
+name: Объединение документации SRS
+
+on:
+  push:
+    branches: 
+      - main
+    paths:
+      - '*.md'
+      - '1_introduction.md'
+      - '2_roles_glossary.md'
+      - '3_business_requirements.md'
+      - '4_functional_requirements.md'
+      - '5_non-functional_requirements.md'
+
+permissions:
+  contents: write
+
+jobs:
+  concatenate-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout репозитория
+        uses: actions/checkout@v4
+        
+      - name: Создание объединённого документа
+        run: |
+          echo "# Software Requirements Specification (SRS)" > FULL_SRS.md
+          echo "# План работ - Интеграционный сервис Маяк" >> FULL_SRS.md
+          echo "" >> FULL_SRS.md
+          echo "**Версия:** 1.0  " >> FULL_SRS.md
+          echo "**Дата:** $(date +%d-%m-%Y)  " >> FULL_SRS.md
+          echo "**Статус:** Active" >> FULL_SRS.md
+          echo "" >> FULL_SRS.md
+          echo "---" >> FULL_SRS.md
+          echo "" >> FULL_SRS.md
+          
+          # Добавляем содержимое каждого файла
+          for file in 1_introduction.md 2_roles_glossary.md 3_business_requirements.md 4_functional_requirements.md 5_non-functional_requirements.md; do
+            if [ -f "$file" ]; then
+              echo "" >> FULL_SRS.md
+              cat "$file" >> FULL_SRS.md
+              echo "" >> FULL_SRS.md
+              echo "---" >> FULL_SRS.md
+              echo "" >> FULL_SRS.md
+            fi
+          done
+          
+      - name: Коммит изменений
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          git add FULL_SRS.md
+          git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Автообновление полной версии SRS" && git push)
