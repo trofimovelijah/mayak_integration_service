@@ -1,0 +1,15 @@
+= Software Requirements Specification (SRS)
+
+= План работ - Интеграционный сервис Маяк
+
+*Версия:* 1.0 +
+*Дата:* 25-11-2025 +
+*Статус:* Active
+
+== Содержание
+
+. link:./1_introduction.md[Описание проекта]
+. link:2_roles_glossary.md[Входная аналитика]
+. link:3_business_requirements.md[Бизнес требования и бизнес-ограничения]
+. link:4_functional_requirements.md[Функциональные требования]
+. link:5_non-functional_requirements.md[Нефункциональные требования]
